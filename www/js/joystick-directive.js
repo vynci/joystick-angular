@@ -56,11 +56,9 @@ angular.module('starter.joystick', []).directive('joystick', function() {
             function onTouchStart(event) {
                 var touch = event.targetTouches[0];
                 cursorTouchId = touch.identifier;
-                console.log(touch.target.offsetTop);
-                console.log(touch.pageY);
                 cursorTouch = {
                     x : touch.pageX - touch.target.offsetLeft,
-                    y : touch.pageY - (touch.target.offsetTop*2)
+                    y : touch.pageY - 70
                 };
             }
 
@@ -74,7 +72,7 @@ angular.module('starter.joystick', []).directive('joystick', function() {
                     {
                         cursorTouch = {
                             x : touch.pageX - touch.target.offsetLeft,
-                            y : touch.pageY - (touch.target.offsetTop*2)
+                            y : touch.pageY - 70
                         };
 
                         var scaleX = radiusBound / (cursorTouch.x - center.x);
