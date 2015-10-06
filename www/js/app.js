@@ -42,23 +42,35 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.timeLapse', {
+    url: '/time-lapse',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/time-lapse.html',
+        controller: 'TimeLapseCtrl'
+      }
+    }
+  })
+
+  .state('app.moveManager', {
+      url: '/move-manager',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/move-manager.html',
+          controller: 'MoveManagerCtrl'
         }
       }
     })
-    .state('app.playlists', {
-      url: '/playlists',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
-        }
+
+  .state('app.playlists', {
+    url: '/playlists',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/playlists.html',
+        controller: 'PlaylistsCtrl'
       }
-    })
+    }
+  })
 
   .state('app.single', {
     url: '/playlists/:playlistId',

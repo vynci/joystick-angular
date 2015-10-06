@@ -1,11 +1,92 @@
-<ion-view view-title="Playlists">
-  <ion-content>
+<ion-view view-title="Real Time">
+  <ion-content class="center-item">
+    <div class="row button-header">
+      <div class="col col-25">
+        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
+          Speed <span class="balanced">Fast</span>
+        </button>
+      </div>
+      <div class="col col-75">
+        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
+          Limit <span class="balanced">T: 0° P: 0° S:0 - T: 90° P: 90° S: 250</span>
+        </button>
+      </div>
 
-    <p>{{pos.x}}, {{pos.y}}</p>
-    <joystick position="pos"></joystick>
+    </div>
 
-    <!-- <p>{{pos2.x}}, {{pos2.y}}</p>
-    <joystick position="pos2"></joystick> -->
+    <div class="row button-header">
+      <div class="col col-25">
+        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
+          <span class="balanced">00:24:47</span>
+        </button>
+      </div>
+      <div class="col col-55">
+        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
+          Home <span class="balanced">T: 47° P: 88° S: 125</span>
+        </button>
+      </div>
+      <div class="col col-10">
+        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
+          <i class="ion-android-home info"></i>
+        </button>
+      </div>
+
+      <div class="col col-10">
+        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
+          <i class="icon ion-gear-a info"></i>
+        </button>
+      </div>
+
+    </div>
+    <br>
+    <div>
+      <span class="info">Slider: {{slider}}</span>
+    </div>
+    <div>
+      <div class="range range-assertive">
+        <i class="icon ion-ios-arrow-left info"></i>
+        <input type="range" name="volume" min="0" max="250" value="125" ng-model="slider">
+        <i class="icon ion-ios-arrow-right info"></i>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <button class="button button-outline button-block button-assertive" ng-click="fastDecSlider()">
+            <i class="icon ion-ios-arrow-back info"></i><i class="icon ion-ios-arrow-back info"></i>
+          </button>
+        </div>
+        <div class="col">
+          <button class="button button-outline button-block button-balanced" ng-click="decSlider()">
+            <i class="icon ion-ios-arrow-back info"></i>
+          </button>
+        </div>
+        <div class="col">
+          <button class="button button-block button-assertive" ng-click="centerSlider()">
+            0
+          </button>
+        </div>
+        <div class="col">
+          <button class="button button-outline button-block button-balanced" ng-click="incSlider()">
+            <i class="icon ion-ios-arrow-forward info"></i>
+          </button>
+        </div>
+        <div class="col">
+          <button class="button button-outline button-block button-assertive" ng-click="fastIncSlider()">
+            <i class="icon ion-ios-arrow-forward info"></i><i class="icon ion-ios-arrow-forward info"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <br>
+    <div>
+      <span class="info">dx: {{pos.x}}</span>
+      <span class="info">dy: {{pos.y}}</span>
+    </div>
+    <br>
+    <div>
+      <joystick position="pos"></joystick>
+    </div>
 
   </ion-content>
 </ion-view>

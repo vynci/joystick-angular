@@ -1,0 +1,80 @@
+<div class="modal">
+  <ion-header-bar class="bar-dark">
+  <h1 class="title">Settings</h1>
+  </ion-header-bar>
+  <ion-content class="background">
+    <div class="list info">
+      <div class="item item-divider info center-item">
+        Set Speed
+      </div>
+      <div class="range range-assertive">
+        Fast
+        <input type="range" name="volume" min="0" max="250" value="125" ng-model="slider">
+      </div>
+
+      <div class="item item-divider info center-item">
+        Set Limit
+      </div>
+      <div class="row">
+        <div class="col">
+          <label class="item item-input">
+            <span class="input-label info">Pan Start</span>
+            <input type="text" class="info">
+          </label>
+          <label class="item item-input">
+            <span class="input-label info">Tilt Start</span>
+            <input type="text" class="info">
+          </label>
+          <label class="item item-input">
+            <span class="input-label info">Slide Start</span>
+            <input type="text" class="info">
+          </label>
+        </div>
+        <div class="col">
+          <label class="item item-input">
+            <span class="input-label info" class="info">Pan End</span>
+            <input type="text" class="info">
+          </label>
+          <label class="item item-input">
+            <span class="input-label info">Tilt End</span>
+            <input type="text" class="info">
+          </label>
+          <label class="item item-input">
+            <span class="input-label info">Slide End</span>
+            <input type="text" class="info">
+          </label>
+        </div>
+      </div>
+
+
+
+
+      <div class="item item-divider info center-item">
+        Set Home
+      </div>
+
+      <label class="item item-input">
+        <span class="input-label info" class="info">Pan</span>
+        <input type="text" class="info">
+      </label>
+      <label class="item item-input">
+        <span class="input-label info">Tilt</span>
+        <input type="text" class="info">
+      </label>
+      <label class="item item-input">
+        <span class="input-label info">Slide</span>
+        <input type="text" class="info">
+      </label>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button class="button button-block button-assertive" ng-click="closeModal()">Cancel</button>
+      </div>
+      <div class="col">
+        <button class="button button-block button-balanced" ng-click="closeModal()">Save</button>
+      </div>
+    </div>
+
+
+  </ion-content>
+</div>

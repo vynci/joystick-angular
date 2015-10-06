@@ -1,0 +1,66 @@
+<div class="modal">
+  <ion-header-bar class="bar-dark">
+  <h1 class="title">Add Move</h1>
+  </ion-header-bar>
+  <ion-content class="background">
+    <div class="list info">
+
+      <label class="item item-input">
+        <span class="input-label info" class="info">Name</span>
+        <input type="text" class="info">
+      </label>
+
+      <div class="item item-divider info center-item">
+        Set Offset
+      </div>
+      <div class="range range-assertive">
+        3
+        <input type="range" name="volume" min="0" max="250" value="125" ng-model="slider">
+      </div>
+
+      <div class="item item-divider info center-item">
+        Set Timing
+      </div>
+
+      <label class="item item-input">
+        <span class="input-label info" class="info">Duration</span>
+        <input type="text" class="info">
+      </label>
+      <label class="item item-input">
+        <span class="input-label info">Delay</span>
+        <input type="text" class="info">
+      </label>
+
+
+      <div class="item item-divider info center-item">
+        Set Position
+      </div>
+
+      <label class="item item-input">
+        <span class="input-label info" class="info">Pan</span>
+        <input type="text" class="info">
+      </label>
+      <label class="item item-input">
+        <span class="input-label info">Tilt</span>
+        <input type="text" class="info">
+      </label>
+      <label class="item item-input">
+        <span class="input-label info">Slide</span>
+        <input type="text" class="info">
+      </label>
+
+
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <button class="button button-block button-assertive" ng-click="closeModal()">Cancel</button>
+      </div>
+      <div class="col">
+        <button class="button button-block button-balanced" ng-click="closeModal()">Save</button>
+      </div>
+    </div>
+
+
+  </ion-content>
+</div>

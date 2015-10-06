@@ -2,12 +2,45 @@
 .joystickCanvas{
   width		: 200px;
   height		: 200px;
-  border-color: lightcyan;
-  border-style: solid;
-  border-width: 2px;
+  border-color: #39FF14;
+  border-style: dotted;
+  border-width: 3px;
+  border-radius: 100px;
   overflow	: hidden;
   padding		: 0;
   margin		: 0;
   -webkit-user-select	: none;
   -moz-user-select	: none;
+}
+
+.black-bg{
+  background-color: black !important;
+}
+.background, .background .pane, .background .item{
+    background-color: black;
+}
+
+.center-item{
+  text-align: center;
+}
+
+.info{
+  color:white !important;
+}
+
+.title-bar{
+  text-align: center;
+}
+
+.pull-right{
+  float: right;
+}
+
+.copyright-footer{
+  padding-left: 10px;
+  font-size: 10px;
+}
+
+.button-header{
+  height: 50px !important;
 }

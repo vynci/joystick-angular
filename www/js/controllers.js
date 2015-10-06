@@ -41,7 +41,7 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope, $cordovaBluetoothSerial, $timeout, $cordovaCamera, $cordovaBLE, $window) {
+.controller('PlaylistsCtrl', function($scope, $cordovaBluetoothSerial, $timeout, $cordovaCamera, $cordovaBLE, $window, $ionicModal) {
 
   $scope.checkBT = function (time) {
     $timeout(function () {
@@ -61,22 +61,68 @@ angular.module('starter.controllers', [])
       y : 0
   };
 
-  $scope.pos2 = {
-      x : 0,
-      y : 0
-  };
+  $scope.slider = 125;
 
+  $scope.incSlider = function(){
+    $scope.slider += 5;
+  }
+
+  $scope.fastIncSlider = function(){
+    $scope.slider += 10;
+  }
+
+  $scope.decSlider = function(){
+    $scope.slider -= 5;
+  }
+
+  $scope.fastDecSlider = function(){
+    $scope.slider -= 10;
+  }
+
+  $scope.centerSlider = function(){
+    $scope.slider = 125;
+  }
   //$scope.checkBT(2000);
   $scope.blStatus = 'null';
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+
+  $ionicModal.fromTemplateUrl('templates/modal.html', {
+    scope: $scope,
+    animation: false
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
 })
+
+.controller('MoveManagerCtrl', function($scope, $cordovaBluetoothSerial, $ionicModal) {
+  console.log('Hello Move Manager!');
+
+  $ionicModal.fromTemplateUrl('templates/moveManagerModal.html', {
+    scope: $scope,
+    animation: false
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+})
+
+.controller('TimeLapseCtrl', function($scope, $cordovaBluetoothSerial, $ionicModal) {
+  console.log('Hello Time Lapse!');
+
+})
+
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 });
