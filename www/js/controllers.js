@@ -61,6 +61,50 @@ angular.module('starter.controllers', [])
       y : 0
   };
 
+  $scope.joystickValue = {
+      x : 0,
+      y : 0
+  };
+
+  $scope.onPanSlide = function onSlide (value) {
+    console.log('on Pan slide  ' + value);
+    $scope.pos.x = value;
+  }
+
+  $scope.onPanSlideEnd = function onSlideEnd(value) {
+    console.log('on Pan slide end  ' + value);
+    $scope.pos.x = value;
+  }
+
+  $scope.onTiltSlide = function onSlide (value) {
+    console.log('on Tilt slide  ' + value);
+    $scope.pos.y = value;
+  }
+
+  $scope.onTiltSlideEnd = function onSlideEnd(value) {
+    console.log('on Tilt slide end  ' + value);
+    $scope.pos.y = value;
+  }
+
+  $scope.isSliderJoystick = false;
+  $scope.isPanTiltJoystick = true;
+
+  $scope.showSliderJoystick = function(){
+    if($scope.isSliderJoystick === true){
+      $scope.isSliderJoystick = false;
+    } else {
+      $scope.isSliderJoystick = true;
+    }
+  }
+
+  $scope.showPanTiltJoystick = function(){
+    if($scope.isPanTiltJoystick === true){
+      $scope.isPanTiltJoystick = false;
+    } else {
+      $scope.isPanTiltJoystick = true;
+    }
+  }
+
   $scope.slider = 125;
 
   $scope.incSlider = function(){

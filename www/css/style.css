@@ -41,6 +41,13 @@
   font-size: 10px;
 }
 
+.header-section{
+  margin-bottom: 10px;
+}
 .button-header{
   height: 50px !important;
+}
+
+.slider-joystick{
+  height: 205px
 }

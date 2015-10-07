@@ -1,48 +1,42 @@
 <ion-view view-title="Real Time">
   <ion-content class="center-item">
-    <div class="row button-header">
-      <div class="col col-25">
-        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
-          Speed <span class="balanced">Fast</span>
-        </button>
-      </div>
-      <div class="col col-75">
-        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
-          Limit <span class="balanced">T: 0° P: 0° S:0 - T: 90° P: 90° S: 250</span>
-        </button>
+    <div class="header-section">
+      <div class="row button-header">
+        <div class="col">
+          <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
+            Limit <span class="balanced">T: 0° P: 0° S:0 - T: 90° P: 90° S: 250</span>
+          </button>
+        </div>
       </div>
 
+      <div class="row button-header">
+        <div class="col col-80">
+          <button class="button button-small button-outline button-block button-assertive" ng-click="showSliderJoystick()">
+            Home <span class="balanced">T: 47° P: 88° S: 125</span>
+          </button>
+        </div>
+        <div class="col col-10">
+          <button class="button button-small button-outline button-block button-assertive" ng-click="showPanTiltJoystick()">
+            <i class="ion-android-home info"></i>
+          </button>
+        </div>
+
+        <div class="col col-10">
+          <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
+            <i class="icon ion-gear-a info"></i>
+          </button>
+        </div>
+      </div>
     </div>
-
-    <div class="row button-header">
-      <div class="col col-25">
-        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
-          <span class="balanced">00:24:47</span>
-        </button>
-      </div>
-      <div class="col col-55">
-        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
-          Home <span class="balanced">T: 47° P: 88° S: 125</span>
-        </button>
-      </div>
-      <div class="col col-10">
-        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
-          <i class="ion-android-home info"></i>
-        </button>
-      </div>
-
-      <div class="col col-10">
-        <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
-          <i class="icon ion-gear-a info"></i>
-        </button>
-      </div>
-
-    </div>
-    <br>
     <div>
       <span class="info">Slider: {{slider}}</span>
     </div>
-    <div>
+
+    <div ng-show="isSliderJoystick" class="slider-joystick">
+      <joystick position="pos2"></joystick>
+    </div>
+
+    <div ng-show="!isSliderJoystick" class="slider-joystick">
       <div class="range range-assertive">
         <i class="icon ion-ios-arrow-left info"></i>
         <input type="range" name="volume" min="0" max="250" value="125" ng-model="slider">
@@ -76,17 +70,54 @@
           </button>
         </div>
       </div>
+      <div class="row">
+        <div class="col">
+          <button class="button button-small button-outline button-block button-assertive" ng-click="fastIncSlider()">
+            <i class="icon ion-ios-arrow-forward info"></i><i class="icon ion-ios-arrow-forward info"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div>
+      <span class="info">Pan: {{pos.x}}</span>
+      <span class="info">Tilt: {{pos.y}}</span>
+    </div>
 
+    <div ng-show="isPanTiltJoystick">
+      <joystick position="joystickValue"></joystick>
     </div>
-    <br>
+
+    <div ng-show="!isPanTiltJoystick">
+      <circular-slider
+        class='sliderPan'
+        shape='Circle'
+        touch="true"
+        animate='true'
+        on-slide='onPanSlide'
+        on-slide-end='onPanSlideEnd'
+        min="-180"
+        max="180"
+        value="panValue">
+        Pan
+      </circular-slider>
+
+      <circular-slider
+        class='sliderTilt'
+        shape='Circle'
+        touch="true"
+        animate='true'
+        on-slide='onTiltSlide'
+        on-slide-end='onTiltSlideEnd'
+        min="-180"
+        max="180"
+        value="tiltValue"
+        >
+        Tilt
+      </circular-slider>
     <div>
-      <span class="info">dx: {{pos.x}}</span>
-      <span class="info">dy: {{pos.y}}</span>
-    </div>
-    <br>
-    <div>
-      <joystick position="pos"></joystick>
-    </div>
+
+
 
   </ion-content>
 </ion-view>
