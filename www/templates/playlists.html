@@ -10,18 +10,25 @@
       </div>
 
       <div class="row button-header">
-        <div class="col col-80">
+        <div class="col">
           <button class="button button-small button-outline button-block button-assertive" ng-click="showSliderJoystick()">
-            Home <span class="balanced">T: 47° P: 88° S: 125</span>
-          </button>
-        </div>
-        <div class="col col-10">
-          <button class="button button-small button-outline button-block button-assertive" ng-click="showPanTiltJoystick()">
-            <i class="ion-android-home info"></i>
+            Home
           </button>
         </div>
 
-        <div class="col col-10">
+        <div class="col">
+          <button class="button button-small button-outline button-block button-assertive" ng-click="showSliderJoystick()">
+            Slider
+          </button>
+        </div>
+
+        <div class="col">
+          <button class="button button-small button-outline button-block button-assertive" ng-click="showPanTiltJoystick()">
+            Pan/Tilt
+          </button>
+        </div>
+
+        <div class="col">
           <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
             <i class="icon ion-gear-a info"></i>
           </button>
@@ -33,7 +40,7 @@
     </div>
 
     <div ng-show="isSliderJoystick" class="slider-joystick">
-      <joystick position="pos2"></joystick>
+      <joystick position="pos2" offset="167"></joystick>
     </div>
 
     <div ng-show="!isSliderJoystick" class="slider-joystick">
@@ -70,13 +77,7 @@
           </button>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <button class="button button-small button-outline button-block button-assertive" ng-click="fastIncSlider()">
-            <i class="icon ion-ios-arrow-forward info"></i><i class="icon ion-ios-arrow-forward info"></i>
-          </button>
-        </div>
-      </div>
+
     </div>
     <br>
     <div>
@@ -85,9 +86,9 @@
     </div>
 
     <div ng-show="isPanTiltJoystick">
-      <joystick position="joystickValue"></joystick>
+      <joystick position="joystickValue" offset="413"></joystick>
     </div>
-
+    <br>
     <div ng-show="!isPanTiltJoystick">
       <circular-slider
         class='sliderPan'
@@ -109,6 +110,8 @@
         animate='true'
         on-slide='onTiltSlide'
         on-slide-end='onTiltSlideEnd'
+        radius="75"
+        indicatorBallRatio="1"
         min="-180"
         max="180"
         value="tiltValue"

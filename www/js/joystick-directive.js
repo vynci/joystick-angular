@@ -3,7 +3,7 @@ window.requestAnimFrame = (function(){
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame    ||
         function( callback ){
-            window.setTimeout(callback, 1000 / 60);
+            window.setTimeout(callback, 10000 / 60);
         };
 })();
 
@@ -20,11 +20,12 @@ angular.module('starter.joystick', []).directive('joystick', function() {
         }],
         scope : {
             // Using primitives here did not work, so we use an Object, see: http://stackoverflow.com/questions/14049480/what-are-the-nuances-of-scope-prototypal-prototypical-inheritance-in-angularjs
-            position : '='
+            position : '=',
+            offset : '='
         },
         template : '<canvas class="joystickCanvas"></canvas>',
         link : function(scope, element) {
-
+            console.log(scope.offset);
             var joystickHeight = 200;
             var joystickWidth  = 200;
 
@@ -60,7 +61,7 @@ angular.module('starter.joystick', []).directive('joystick', function() {
                 console.log(touch.pageY);
                 cursorTouch = {
                     x : touch.pageX - touch.target.offsetLeft,
-                    y : touch.pageY - 413
+                    y : touch.pageY - scope.offset
                 };
             }
 
@@ -74,7 +75,7 @@ angular.module('starter.joystick', []).directive('joystick', function() {
                     {
                         cursorTouch = {
                             x : touch.pageX - touch.target.offsetLeft,
-                            y : touch.pageY - 413
+                            y : touch.pageY - scope.offset
                         };
 
                         var scaleX = radiusBound / (cursorTouch.x - center.x);

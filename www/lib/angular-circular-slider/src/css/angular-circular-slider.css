@@ -24,7 +24,7 @@ Copyright (c) 2015 Prince John Wesley <princejohnwesley@gmail.com>
   position: relative;
   border-style: solid;
   border-radius: 100%;
-  border-color: hotpink;
+  border-color: red;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   cursor: pointer;
@@ -39,14 +39,13 @@ Copyright (c) 2015 Prince John Wesley <princejohnwesley@gmail.com>
   pointer-events: none;
   line-height: 4em;
   color: white;
-  background-color: yellowgreen;
   outline: none;
 }
 
 .acs-indicator {
   position: absolute;
   border-radius: 100%;
-  background-color: deeppink;
+  background-color: #39FF14;
   border: 1px solid rgb(177, 177, 177);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
