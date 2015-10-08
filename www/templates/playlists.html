@@ -79,16 +79,15 @@
       </div>
 
     </div>
-    <br>
     <div>
       <span class="info">Pan: {{pos.x}}</span>
       <span class="info">Tilt: {{pos.y}}</span>
     </div>
 
     <div ng-show="isPanTiltJoystick">
-      <joystick position="joystickValue" offset="413"></joystick>
+      <joystick position="joystickValue" offset="393"></joystick>
     </div>
-    <br>
+
     <div ng-show="!isPanTiltJoystick">
       <circular-slider
         class='sliderPan'

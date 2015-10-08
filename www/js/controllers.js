@@ -41,20 +41,7 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope, $cordovaBluetoothSerial, $timeout, $cordovaCamera, $cordovaBLE, $window, $ionicModal) {
-
-  $scope.checkBT = function (time) {
-    $timeout(function () {
-      $cordovaBluetoothSerial.isEnabled().then(
-        function() {
-          $scope.blStatus = 'success';
-        },
-        function() {
-          $scope.blStatus = 'error';
-        }
-      );
-     },time);
-  };
+.controller('PlaylistsCtrl', function($scope, $cordovaBluetoothSerial, $timeout, $ionicModal) {
 
   $scope.pos = {
       x : 0,
@@ -168,5 +155,42 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('BluetoothSearch', function($scope, $cordovaBluetoothSerial, $timeout) {
+  $scope.blStatus = 'Disabled';
+  console.log($cordovaBluetoothSerial);
+  $scope.checkBT = function (time) {
+    $timeout(function () {
+      $cordovaBluetoothSerial.isEnabled().then(
+        function() {
+          $scope.blStatus = 'Enabled';
+        },
+        function() {
+          $scope.blStatus = 'Disabled';
+        }
+      );
+     },time);
+  };
+
+  $scope.listBT = function() {
+    $cordovaBluetoothSerial.list().then(
+      function(devices) {
+        $scope.btDevices = devices;
+      },
+      function() {
+        $scope.blStatus = 'Error on Discover';
+      }
+    );
+  };
+
+  $scope.connectBT = function(id) {
+    $cordovaBluetoothSerial.connect(id).then(
+      function() {
+        $scope.blStatus = 'Successfully Connected';
+      },
+      function() {
+        $scope.blStatus = 'Error on Connection';
+      }
+    );
+  };
+  $scope.checkBT(1000);
 });

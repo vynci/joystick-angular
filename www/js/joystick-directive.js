@@ -3,7 +3,7 @@ window.requestAnimFrame = (function(){
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame    ||
         function( callback ){
-            window.setTimeout(callback, 10000 / 60);
+            window.setTimeout(callback, 10 / 60);
         };
 })();
 

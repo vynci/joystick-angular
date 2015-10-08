@@ -1,7 +1,8 @@
 <ion-view view-title="Bluetooth Setup">
   <ion-content>
+
     <div class="title-bar">
-      <h4 class="info"> Paired Device:</h4>
+      <h4 class="info"> Status: {{blStatus}}</h4>
     </div>
     <div class="list">
 
@@ -19,42 +20,19 @@
       <h4 class="info">Available Devices:</h4>
     </div>
     <div class="list">
-      <div class="item item-button-right info">
-        <b><i class="icon ion-headphone"></i></b>
-        YET-M1 Audio BT
-        <button class="button button-assertive">
-          <i class="icon ion-link"></i>
-        </button>
-      </div>
 
-      <div class="item item-button-right info">
-        <b><i class="icon ion-monitor"></i></b>
-        Vince's MacBook Pro
-        <button class="button button-assertive">
-          <i class="icon ion-link"></i>
-        </button>
-      </div>
-
-      <div class="item item-button-right info">
-        <b><i class="icon ion-bluetooth"></i></b>
-        74:3A:55:23
-        <button class="button button-assertive">
-          <i class="icon ion-link"></i>
-        </button>
-      </div>
-
-      <div class="item item-button-right info">
-        <b><i class="icon ion-bluetooth"></i></b>
-        SteadyTracker BT
-        <button class="button button-assertive">
-          <i class="icon ion-link"></i>
-        </button>
-      </div>
-
+      <ion-item ng-repeat="device in btDevices"
+                class="item item-button-right info">
+          <b><i class="icon ion-bluetooth"></i></b>
+          {{device.name}}
+          <button class="button button-assertive" ng-click="connectBT(device.id)">
+            <i class="icon ion-link"></i>
+          </button>
+      </ion-item>
     </div>
     <div class="row">
       <div class="col">
-        <button class="button button-block button-assertive">
+        <button class="button button-block button-assertive" ng-click="listBT()">
           <i class="icon ion-loop"></i>
           Discover
         </button>
