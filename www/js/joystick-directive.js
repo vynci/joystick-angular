@@ -10,14 +10,11 @@ window.requestAnimFrame = (function(){
 angular.module('starter.joystick', []).directive('joystick', function() {
 
     function joystickController ($scope) {
-
     }
 
     return {
         restrict : 'E',
-        controller : ['$scope', function ($scope) {
-            return joystickController($scope);
-        }],
+        controller : 'PlaylistsCtrl',
         scope : {
             // Using primitives here did not work, so we use an Object, see: http://stackoverflow.com/questions/14049480/what-are-the-nuances-of-scope-prototypal-prototypical-inheritance-in-angularjs
             position : '=',
@@ -25,7 +22,7 @@ angular.module('starter.joystick', []).directive('joystick', function() {
         },
         template : '<canvas class="joystickCanvas"></canvas>',
         link : function(scope, element) {
-            console.log(scope.offset);
+
             var joystickHeight = 200;
             var joystickWidth  = 200;
 
@@ -57,8 +54,6 @@ angular.module('starter.joystick', []).directive('joystick', function() {
             function onTouchStart(event) {
                 var touch = event.targetTouches[0];
                 cursorTouchId = touch.identifier;
-                console.log(touch);
-                console.log(touch.pageY);
                 cursorTouch = {
                     x : touch.pageX - touch.target.offsetLeft,
                     y : touch.pageY - scope.offset
@@ -155,12 +150,12 @@ angular.module('starter.joystick', []).directive('joystick', function() {
             }
 
             // Bind to the values from outside as well
-            scope.$watch('position', function(newval) {
-                cursorTouch = {
-                    x : ((newval.x * radiusBound) / 100) + center.x,
-                    y : ((newval.y * radiusBound) / -100) + center.y
-                };
-            });
+            // scope.$watch('position', function(newval) {
+            //     cursorTouch = {
+            //         x : ((newval.x * radiusBound) / 100) + center.x,
+            //         y : ((newval.y * radiusBound) / -100) + center.y
+            //     };
+            // });
 
             resetCanvas();
             draw();

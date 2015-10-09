@@ -36,11 +36,11 @@
       </div>
     </div>
     <div>
-      <span class="info">Slider: {{slider}}</span>
+      <span class="info">Slider: {{blMsgStatus}}</span>
     </div>
 
     <div ng-show="isSliderJoystick" class="slider-joystick">
-      <joystick position="pos2" offset="167"></joystick>
+      <joystick position="sliderJoystickValue" offset="167"></joystick>
     </div>
 
     <div ng-show="!isSliderJoystick" class="slider-joystick">
@@ -85,7 +85,7 @@
     </div>
 
     <div ng-show="isPanTiltJoystick">
-      <joystick position="joystickValue" offset="393"></joystick>
+      <joystick position="panTiltJoystickValue" offset="393"></joystick>
     </div>
 
     <div ng-show="!isPanTiltJoystick">

@@ -43,15 +43,59 @@ angular.module('starter.controllers', [])
 
 .controller('PlaylistsCtrl', function($scope, $cordovaBluetoothSerial, $timeout, $ionicModal) {
 
+  $scope.executeRT = function (time, pan, tilt, slider) {
+    $timeout(function () {
+      $cordovaBluetoothSerial.write('E:['+ pan.x + ',' + tilt.y + ',' + slider + ']').then(
+        function() {
+          $scope.blMsgStatus = 'E:['+ pan.x + ',' + tilt.y + ',' + slider + ']';
+        },
+        function() {
+          $scope.blMsgStatus = 'Error';
+        }
+      );
+     },time);
+  };
+
+  $scope.goToXYZ = function (time) {
+    $timeout(function () {
+      $cordovaBluetoothSerial.write('G:[0,0,0,' + $scope.panTiltJoystickValue.x + ',' + $scope.panTiltJoystickValue.y + ',' + $scope.panTiltJoystickValue.x + ']').then(
+        function() {
+          $scope.blMsgStatus = 'Enabled';
+        },
+        function() {
+          $scope.blMsgStatus = 'Disabled';
+        }
+      );
+     },time);
+  };
+
   $scope.pos = {
       x : 0,
       y : 0
   };
 
-  $scope.joystickValue = {
+  $scope.panTiltJoystickValue = {
       x : 0,
       y : 0
   };
+
+  $scope.sliderJoystickValue = {
+      x : 0,
+      y : 0
+  };
+
+  $scope.$watch(function ( $scope ) {
+       return $scope.position;
+  }, function(newVal, oldVal){
+    // $scope.executeRT(1000);
+    if($scope.offset === 167){
+      console.log('0,0,' + $scope.position.x);
+      scope.executeRT(100, 0,0,$scope.position.x);
+    } else {
+      console.log($scope.position.x + ',' + $scope.position.y + ',0');
+      $scope.executeRT(100, $scope.position.x, $scope.position.y, 0);
+    }
+  });
 
   $scope.onPanSlide = function onSlide (value) {
     console.log('on Pan slide  ' + value);
@@ -113,8 +157,6 @@ angular.module('starter.controllers', [])
   $scope.centerSlider = function(){
     $scope.slider = 125;
   }
-  //$scope.checkBT(2000);
-  $scope.blStatus = 'null';
 
   $ionicModal.fromTemplateUrl('templates/modal.html', {
     scope: $scope,
@@ -128,6 +170,20 @@ angular.module('starter.controllers', [])
   $scope.closeModal = function() {
     $scope.modal.hide();
   };
+
+  $scope.checkBTConnection = function (time) {
+    $timeout(function () {
+      $cordovaBluetoothSerial.isConnected().then(
+        function() {
+          $scope.blMsgStatus = 'Connected';
+        },
+        function() {
+          $scope.blMsgStatus = 'Disconnected';
+        }
+      );
+     },time);
+  };
+  $scope.checkBTConnection(1000);
 
 })
 
@@ -146,14 +202,12 @@ angular.module('starter.controllers', [])
   $scope.closeModal = function() {
     $scope.modal.hide();
   };
-
 })
 
 .controller('TimeLapseCtrl', function($scope, $cordovaBluetoothSerial, $ionicModal) {
   console.log('Hello Time Lapse!');
 
 })
-
 
 .controller('BluetoothSearch', function($scope, $cordovaBluetoothSerial, $timeout) {
   $scope.blStatus = 'Disabled';
@@ -186,11 +240,24 @@ angular.module('starter.controllers', [])
     $cordovaBluetoothSerial.connect(id).then(
       function() {
         $scope.blStatus = 'Successfully Connected';
+        $scope.testWrite();
       },
       function() {
         $scope.blStatus = 'Error on Connection';
       }
     );
   };
+
+  $scope.testWrite = function (time, pan, tilt, slider) {
+    $cordovaBluetoothSerial.write('E:[0,0,0]').then(
+      function() {
+        $scope.blStatus = 'E:[0,0,0]';
+      },
+      function() {
+        $scope.blStatus = 'Error';
+      }
+    );
+  };
+
   $scope.checkBT(1000);
 });
