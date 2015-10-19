@@ -7,7 +7,7 @@
 
       <label class="item item-input">
         <span class="input-label info" class="info">Name</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="move.name">
       </label>
 
       <div class="item item-divider info center-item">
@@ -15,7 +15,7 @@
       </div>
       <div class="range range-assertive">
         3
-        <input type="range" name="volume" min="0" max="250" value="125" ng-model="slider">
+        <input type="range" name="volume" min="0" max="100" ng-model="move.offset">
       </div>
 
       <div class="item item-divider info center-item">
@@ -24,11 +24,11 @@
 
       <label class="item item-input">
         <span class="input-label info" class="info">Duration</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="move.duration">
       </label>
       <label class="item item-input">
         <span class="input-label info">Delay</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="move.delay">
       </label>
 
 
@@ -38,15 +38,15 @@
 
       <label class="item item-input">
         <span class="input-label info" class="info">Pan</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="move.pan">
       </label>
       <label class="item item-input">
         <span class="input-label info">Tilt</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="move.tilt">
       </label>
       <label class="item item-input">
-        <span class="input-label info">Slide</span>
-        <input type="text" class="info">
+        <span class="input-label info">Slider</span>
+        <input type="text" class="info" ng-model="move.slider">
       </label>
 
 
@@ -57,7 +57,7 @@
         <button class="button button-block button-assertive" ng-click="closeModal()">Cancel</button>
       </div>
       <div class="col">
-        <button class="button button-block button-balanced" ng-click="closeModal()">Save</button>
+        <button class="button button-block button-balanced" ng-click="saveMove(move.id)">Save</button>
       </div>
     </div>
 

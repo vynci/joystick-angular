@@ -3,128 +3,129 @@
     <div class="item item-divider info center-item">
         <span class="assertive">Time Line - </span>00:05:01
     </div>
-    <div class="row button-header">
 
-    <div class="col col-25">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveA <span class="royal">00:..</span>
-        </button>
-      </div>
-      <div class="col col-75">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveB <span class="royal">00:00:25</span>
-        </button>
-      </div>
+    <ion-list>
+      <button class="button button-small button-outline button-block button-balanced" ng-repeat="item in keyFrames" ng-click="openModal(item)">
+        {{item.name}}
+      </button>
+    </ion-list>
 
-    </div>
-
-    <div class="row button-header">
-      <div class="col col-10">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          M.
-        </button>
-      </div>
-      <div class="col col-30">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveD <span class="royal">00:00:40</span>
-        </button>
-      </div>
-      <div class="col col-20">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveE..
-        </button>
-      </div>
-      <div class="col col-40">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveF <span class="royal">00:01:01</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="row button-header">
-      <div class="col col-30">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveG <span class="royal">00:01:..</span>
-        </button>
-      </div>
-      <div class="col col-30">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveH <span class="royal">00:01..</span>
-        </button>
-      </div>
-      <div class="col col-10">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          M.
-        </button>
-      </div>
-      <div class="col col-30">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveJ <span class="royal">00:01..</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="row button-header">
-      <div class="col col-40">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveK <span class="royal">00:02:40</span>
-        </button>
-      </div>
-      <div class="col col-60">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveL <span class="royal">00:03:00</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="row button-header">
-      <div class="col col-60">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveM <span class="royal">00:03:30</span>
-        </button>
-      </div>
-      <div class="col col-20">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveN <span class="royal">..</span>
-        </button>
-      </div>
-      <div class="col col-20">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveO <span class="royal">..</span>
-        </button>
-      </div>
+      <!-- <div class="col col-25">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveA <span class="royal">00:..</span>
+          </button>
+        </div>
+        <div class="col col-75">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveB <span class="royal">00:00:25</span>
+          </button>
+        </div>
 
       </div>
-    </div>
 
-    <div class="row button-header">
-      <div class="col col-40">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveP <span class="royal">00:04:10</span>
-        </button>
-      </div>
-      <div class="col col-30">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveQ <span class="royal">00:04:40</span>
-        </button>
-      </div>
-      <div class="col col-30">
-        <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-          MoveR <span class="royal">00:05:01</span>
-        </button>
+      <div class="row button-header">
+        <div class="col col-10">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            M.
+          </button>
+        </div>
+        <div class="col col-30">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveD <span class="royal">00:00:40</span>
+          </button>
+        </div>
+        <div class="col col-20">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveE..
+          </button>
+        </div>
+        <div class="col col-40">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveF <span class="royal">00:01:01</span>
+          </button>
+        </div>
       </div>
 
+      <div class="row button-header">
+        <div class="col col-30">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveG <span class="royal">00:01:..</span>
+          </button>
+        </div>
+        <div class="col col-30">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveH <span class="royal">00:01..</span>
+          </button>
+        </div>
+        <div class="col col-10">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            M.
+          </button>
+        </div>
+        <div class="col col-30">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveJ <span class="royal">00:01..</span>
+          </button>
+        </div>
       </div>
-    </div>
+
+      <div class="row button-header">
+        <div class="col col-40">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveK <span class="royal">00:02:40</span>
+          </button>
+        </div>
+        <div class="col col-60">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveL <span class="royal">00:03:00</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="row button-header">
+        <div class="col col-60">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveM <span class="royal">00:03:30</span>
+          </button>
+        </div>
+        <div class="col col-20">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveN <span class="royal">..</span>
+          </button>
+        </div>
+        <div class="col col-20">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveO <span class="royal">..</span>
+          </button>
+        </div>
+
+        </div>
+      </div>
+
+      <div class="row button-header">
+        <div class="col col-40">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveP <span class="royal">00:04:10</span>
+          </button>
+        </div>
+        <div class="col col-30">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveQ <span class="royal">00:04:40</span>
+          </button>
+        </div>
+        <div class="col col-30">
+          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
+            MoveR <span class="royal">00:05:01</span>
+          </button>
+        </div>
+
+      </div> -->
 
     <br>
 
-    <div class="info center-item">
-      Pan: 25° Tilt: 85° Slider: 122
-    </div>
     <br>
     <div class="item item-divider center-item">
-      <span class="assertive">Move Controls</span>
+      <span class="info">{{bluetoothRx}}</span>
     </div>
 
     <div class="row">
@@ -139,7 +140,7 @@
         </button>
       </div>
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="openModal()">
+        <button class="button button-block button-assertive" ng-click="executeStack()">
           <i class="icon ion-play"></i>
         </button>
       </div>

@@ -9,7 +9,7 @@
       </div>
       <div class="range range-assertive">
         Fast
-        <input type="range" name="volume" min="0" max="250" value="125" ng-model="slider">
+        <input type="range" name="volume" min="1" max="100" ng-model="settings.speed">
       </div>
 
       <div class="item item-divider info center-item">
@@ -19,29 +19,29 @@
         <div class="col">
           <label class="item item-input">
             <span class="input-label info">Pan Start</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="settings.panStart">
           </label>
           <label class="item item-input">
             <span class="input-label info">Tilt Start</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="settings.tiltStart">
           </label>
           <label class="item item-input">
             <span class="input-label info">Slide Start</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="settings.slideStart">
           </label>
         </div>
         <div class="col">
           <label class="item item-input">
             <span class="input-label info" class="info">Pan End</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="settings.panEnd">
           </label>
           <label class="item item-input">
             <span class="input-label info">Tilt End</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="settings.tiltEnd">
           </label>
           <label class="item item-input">
             <span class="input-label info">Slide End</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="settings.slideEnd">
           </label>
         </div>
       </div>
@@ -55,23 +55,48 @@
 
       <label class="item item-input">
         <span class="input-label info" class="info">Pan</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="settings.panHome">
       </label>
       <label class="item item-input">
         <span class="input-label info">Tilt</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="settings.tiltHome">
       </label>
       <label class="item item-input">
         <span class="input-label info">Slide</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="settings.slideHome">
       </label>
+
+      <div class="item item-divider info center-item">
+        Set Slave Mode
+      </div>
+
+      <li class="item item-toggle info">
+         Slave
+         <label class="toggle toggle-assertive">
+           <input type="checkbox" ng-model="settings.slaveMode">
+           <div class="track">
+             <div class="handle"></div>
+           </div>
+         </label>
+      </li>
+
+      <div class="item item-divider info center-item">
+        Acceleration Offset
+      </div>
+      <div class="range range-assertive">
+        {{ settings.accelerationOffset | number: 1 }}
+        <input type="range" min="100" max="400" step="1" ng-model="settings.accelerationOffset" id="saccelerationOffset">
+      </div>
+
     </div>
+
+
     <div class="row">
       <div class="col">
         <button class="button button-block button-assertive" ng-click="closeModal()">Cancel</button>
       </div>
       <div class="col">
-        <button class="button button-block button-balanced" ng-click="closeModal()">Save</button>
+        <button class="button button-block button-balanced" ng-click="saveModal()">Save</button>
       </div>
     </div>
 
