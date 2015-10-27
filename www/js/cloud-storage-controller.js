@@ -17,12 +17,20 @@ angular.module('starter.cloud-storage', [])
       scope: $scope
     }).then(function(modal) {
       $scope.modal = modal;
-      if($rootScope.user.id === undefined && $rootScope.user.username === undefined){
+      var currentUser = Parse.User.current();
+      if (!currentUser) {
         $scope.modal.show();
+      } else {
+        console.log(currentUser);
+        getMoves();
       }
     });
   };
 
+  $scope.logout = function(){
+    Parse.User.logOut();
+    activate();
+  }
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
