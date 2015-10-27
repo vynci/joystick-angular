@@ -1,37 +1,9 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, $rootScope) {
 
   // Form data for the login modal
-  $scope.loginData = {};
 
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
 })
 
 .controller('PlaylistsCtrl', function($rootScope, $scope, $cordovaBluetoothSerial, $timeout, $ionicModal, $interval) {
@@ -44,8 +16,6 @@ angular.module('starter.controllers', [])
 
   $scope.tiltProgress = 0.50;
   $scope.counterClockwise = '';
-
-  $rootScope.keyFrames = [];
 
   $scope.settings = {
     speed : 50,
@@ -392,16 +362,36 @@ $scope.writeBluetooth = function(time, data){
 })
 
 .controller('MoveManagerCtrl', function($rootScope, $scope, $cordovaBluetoothSerial, $ionicModal, $timeout, $interval, $cordovaFile) {
+  $scope.inputs = {
+    fileName : ''
+  }
+  $scope.saveStack = function() {
+    document.addEventListener('deviceready', function () {
+      $cordovaFile.writeFile('file:/sdcard/autoCrane', $scope.inputs.fileName + '.json', $rootScope.keyFrames, true)
+       .then(function (success) {
+         $scope.bluetoothRx = 'file ' + $scope.inputs.fileName + ' saved!';
+       }, function (error) {
+         $scope.bluetoothRx = 'error';
+      });
+    });
+  }
 
-  // document.addEventListener('deviceready', function () {
-  //   $cordovaFile.getFreeDiskSpace()
-  //   .then(function (success) {
-  //     // success in kilobytes
-  //     $scope.bluetoothRx = success;
-  //   }, function (error) {
-  //     $scope.bluetoothRx = 'error';
-  //   })
-  // });
+  $scope.loadStack = function() {
+    document.addEventListener('deviceready', function () {
+      $cordovaFile.readAsText('file:/sdcard/autoCrane', $scope.inputs.fileName + '.json')
+      .then(function (success) {
+        var tmp = JSON.parse(success);
+        $rootScope.keyFrames = tmp;
+        $scope.bluetoothRx = 'file ' + $scope.inputs.fileName + ' loaded!';
+      }, function (error) {
+        $scope.bluetoothRx = 'error';
+      });
+    });
+  }
+
+  $scope.newStack = function() {
+    $rootScope.keyFrames = [];
+  }
 
   $ionicModal.fromTemplateUrl('templates/moveManagerModal.html', {
     scope: $scope,
@@ -410,16 +400,27 @@ $scope.writeBluetooth = function(time, data){
     $scope.modal = modal;
   });
   $scope.openModal = function(data) {
-    console.log(data);
-    $scope.move = {};
-    $scope.move.id = data.id;
-    $scope.move.name = data.name;
-    $scope.move.pan = data.pan;
-    $scope.move.tilt = data.tilt;
-    $scope.move.slider = data.slider;
-    $scope.move.offset = data.offset;
-    $scope.move.delay = data.delay;
-    $scope.move.duration = data.duration;
+    if(data){
+      $scope.move = {};
+      $scope.move.id = data.id;
+      $scope.move.name = data.name;
+      $scope.move.pan = data.pan;
+      $scope.move.tilt = data.tilt;
+      $scope.move.slider = data.slider;
+      $scope.move.offset = data.offset;
+      $scope.move.delay = data.delay;
+      $scope.move.duration = data.duration;
+    } else {
+      $scope.move = {};
+
+      $scope.move.name = 'untitled';
+      $scope.move.pan = '';
+      $scope.move.tilt = '';
+      $scope.move.slider = '';
+      $scope.move.offset = 0;
+      $scope.move.delay = '';
+      $scope.move.duration = '';
+    }
 
     $scope.modal.show();
   };
@@ -428,10 +429,19 @@ $scope.writeBluetooth = function(time, data){
   };
 
   $scope.saveMove = function(id) {
-    console.log(id)
-    console.log($rootScope.keyFrames[id]);
-    $rootScope.keyFrames[id] = $scope.move;
-    console.log($rootScope.keyFrames[id]);
+    if(id !== undefined){
+      $rootScope.keyFrames[id] = $scope.move;
+      console.log($rootScope.keyFrames[id]);
+    } else {
+      var id = '';
+      if($rootScope.keyFrames !== undefined){
+        id = $rootScope.keyFrames.length;
+      } else {
+        id = 0;
+      }
+      $scope.move.id =  id;
+      $rootScope.keyFrames.push($scope.move);
+    }
     $scope.modal.hide();
   };
 
@@ -440,12 +450,33 @@ $scope.writeBluetooth = function(time, data){
     var initMsg = 'M:[' + $rootScope.keyFrames.length + ']';
     console.log(initMsg);
     var mainMsg = '';
-    $scope.initMsg(15, initMsg);
-    angular.forEach($rootScope.keyFrames, function(data){
-      mainMsg = data.offset + ',' + data.duration + ',' + data.delay + ',' + data.pan + ',' + data.tilt+ ',' + data.slider + ',';
-      $scope.mainMsg(500, mainMsg);
-    });
-    $scope.mainMsg(500, ']');
+    var x = 0;
+    // var tmp = [];
+    $scope.initMsg(1, initMsg);
+    // angular.forEach($rootScope.keyFrames, function(data){
+    //   $timeout(function () {
+    //     mainMsg = data.offset + ',' + data.duration + ',' + data.delay + ',' + data.pan + ',' + data.tilt+ ',' + data.slider + ']';
+    //     $scope.mainMsg(1000, mainMsg);
+    //   },1000);
+    // });
+    $interval(function(){
+      if(x < ($rootScope.keyFrames.length)){
+        mainMsg = $rootScope.keyFrames[x].offset + ',' + $rootScope.keyFrames[x].duration + ',' + $rootScope.keyFrames[x].delay + ',' + $rootScope.keyFrames[x].pan + ',' + $rootScope.keyFrames[x].tilt+ ',' + $rootScope.keyFrames[x].slider + ']';
+        $scope.mainMsg(1000, mainMsg);
+      }
+      x++;
+    }, 450);
+
+
+
+    // mainMsg = $rootScope.keyFrames[1].offset + ',' + $rootScope.keyFrames[1].duration + ',' + $rootScope.keyFrames[1].delay + ',' + $rootScope.keyFrames[1].pan + ',' + $rootScope.keyFrames[1].tilt+ ',' + $rootScope.keyFrames[1].slider + ']';
+    // $scope.mainMsg(1000, mainMsg);
+    //
+    // mainMsg = $rootScope.keyFrames[2].offset + ',' + $rootScope.keyFrames[2].duration + ',' + $rootScope.keyFrames[2].delay + ',' + $rootScope.keyFrames[2].pan + ',' + $rootScope.keyFrames[2].tilt+ ',' + $rootScope.keyFrames[2].slider + ']';
+    // $scope.initMsg(1000, mainMsg);
+
+
+    // $scope.mainMsg(500, ']');
   }
 
   $scope.initMsg = function(time, data){
@@ -462,18 +493,16 @@ $scope.writeBluetooth = function(time, data){
   }
 
   $scope.mainMsg = function(time, data){
-    $timeout(function () {
-      if($scope.isReceived){
-        $cordovaBluetoothSerial.write(data).then(
-          function() {
-            $scope.blMsgStatus = data;
-          },
-          function() {
-            $scope.blMsgStatus = 'Error';
-          }
-        );
-      }
-    },time);
+    //$timeout(function () {
+      $cordovaBluetoothSerial.write(data).then(
+        function() {
+          $scope.blMsgStatus = data;
+        },
+        function() {
+          $scope.blMsgStatus = 'Error';
+        }
+      );
+    //},time);
   }
 
   $scope.checkBT = function (time) {
@@ -516,9 +545,9 @@ $scope.writeBluetooth = function(time, data){
       }
     );
   }
-  // $interval(function(){
-  //   $scope.readBufferBT();
-  // }, 1000);
+  $interval(function(){
+    $scope.readBufferBT();
+  }, 1000);
   $scope.checkBT(2000);
 })
 
@@ -526,6 +555,8 @@ $scope.writeBluetooth = function(time, data){
   console.log('Hello Time Lapse!');
 
 })
+
+
 
 .controller('BluetoothSearch', function($scope, $cordovaBluetoothSerial, $timeout) {
   $scope.blStatus = 'Disabled';
@@ -565,45 +596,6 @@ $scope.writeBluetooth = function(time, data){
         $scope.blStatus = 'Error on Connection';
       }
     );
-  };
-
-  $scope.testWriteDec = function (time, pan, tilt, slider) {
-    $timeout(function () {
-      $cordovaBluetoothSerial.write('E:[-50,-50,-50]').then(
-        function() {
-          $scope.blStatus = 'E:[-50,-50,-50]';
-        },
-        function() {
-          $scope.blStatus = 'Error';
-        }
-      );
-    },1);
-  };
-
-  $scope.testWrite = function (time, pan, tilt, slider) {
-    $timeout(function () {
-      $cordovaBluetoothSerial.write('E:[50,50,50]').then(
-        function() {
-          $scope.blStatus = 'E:[50,50,50]';
-        },
-        function() {
-          $scope.blStatus = 'Error';
-        }
-      );
-    },1);
-  };
-
-  $scope.testWriteOff = function (time, pan, tilt, slider) {
-    $timeout(function () {
-      $cordovaBluetoothSerial.write('D').then(
-        function() {
-          $scope.blStatus = 'D';
-        },
-        function() {
-          $scope.blStatus = 'Error';
-        }
-      );
-    },1);
   };
 
   $scope.checkBT(1000);

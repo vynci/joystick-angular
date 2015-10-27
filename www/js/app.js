@@ -4,9 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.joystick', 'angular.circular-slider', 'angular-progress-arc'])
+angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.cloud-storage', 'starter.joystick', 'angular.circular-slider', 'angular-progress-arc'])
 
-.run(function($ionicPlatform, $cordovaBluetoothSerial, $window) {
+.run(function($ionicPlatform, $cordovaBluetoothSerial, $window, $rootScope) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,6 +20,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    $rootScope.keyFrames = [];
+    $rootScope.user = {};
+    Parse.initialize("a84IJJ5obBZOsUqCLZ8ckwXgENogwFxy0FLoYXaZ", "LNikEZvdYv45xnMVoKuu1rs6p1ZUO3OI6Bauiu7h");
   });
 })
 
@@ -69,6 +72,16 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       'menuContent': {
         templateUrl: 'templates/playlists.html',
         controller: 'PlaylistsCtrl'
+      }
+    }
+  })
+
+  .state('app.cloudStorage', {
+    url: '/cloud-storage',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/cloud-storage.html',
+        controller: 'CloudStorageCtrl'
       }
     }
   })

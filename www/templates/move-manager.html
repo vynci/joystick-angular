@@ -150,22 +150,25 @@
         </button>
       </div>
     </div>
-
+    <label class="item item-input">
+      <span class="input-label info">File:</span>
+      <input type="text" class="info" ng-model="inputs.fileName">
+    </label>
     <div class="row">
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="openModal()">
+        <button class="button button-block button-assertive" ng-click="newStack()">
           New
         </button>
       </div>
 
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="openModal()">
+        <button class="button button-block button-assertive" ng-click="saveStack()">
           Save
         </button>
       </div>
 
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="openModal()">
+        <button class="button button-block button-assertive" ng-click="loadStack()">
           Load
         </button>
       </div>
