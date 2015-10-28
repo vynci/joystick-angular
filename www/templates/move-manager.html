@@ -1,12 +1,12 @@
 <ion-view view-title="Move Manager">
   <ion-content>
     <div class="item item-divider info center-item">
-        <span class="assertive">Time Line - </span>00:05:01
+        <span class="assertive">Time Line - </span>{{totalTimeHeader}}
     </div>
 
     <ion-list>
-      <button class="button button-small button-outline button-block button-balanced" ng-repeat="item in keyFrames" ng-click="openModal(item)">
-        {{item.name}}
+      <button ng-style="{ 'width' : (((item.delay + item.duration)/totalTime)*10) + '%' }" class="button button-small button-outline button-balanced" ng-repeat="item in keyFrames" ng-click="openModal(item)">
+        {{item.name}} : {{item.delay}} : {{item.duration}}
       </button>
     </ion-list>
 

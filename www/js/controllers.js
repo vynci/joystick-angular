@@ -65,15 +65,19 @@ angular.module('starter.controllers', [])
         }
       } else {
         if($scope.position.y === 100){
-          $scope.goToXYZ(0,$scope.duration,0,0,179,125);
+          console.log('pt-up');
+          //$scope.goToXYZ(0,$scope.duration,0,'x',179,125);
         } else if($scope.position.y === -100) {
-          $scope.goToXYZ(0,$scope.duration,0,0,-179,125);
+          console.log('pt-down');
+          //$scope.goToXYZ(0,$scope.duration,0,'x',-179,125);
         }
 
         if($scope.position.x === 100){
-          $scope.goToXYZ(0,$scope.duration,0,179,179,125);
+          console.log('pt-left');
+          //$scope.goToXYZ(0,$scope.duration,0,179,'x',125);
         } else if($scope.position.x === -100) {
-          $scope.goToXYZ(0,$scope.duration,0,-179,-179,125);
+          console.log('pt-right');
+          //$scope.goToXYZ(0,$scope.duration,0,-179,'x',125);
         }
 
       }
@@ -184,6 +188,28 @@ angular.module('starter.controllers', [])
     alert('KeyFrame Added - Total: ' + $rootScope.keyFrames.length);
   }
 
+  $scope.panTiltOnStart = function(id){
+    console.log('touch');
+    // $cordovaBluetoothSerial.connect(id).then(
+    //   function() {
+    //     $scope.blMsgStatus = 'Successfully Connected';
+    //   },
+    //   function() {
+    //     $scope.blMsgStatus = 'Error on Connection';
+    //   }
+    // );
+  }
+  $scope.panTiltOnEnd = function(){
+    console.log('release');
+    // $cordovaBluetoothSerial.disconnect().then(
+    //   function() {
+    //     $scope.blMsgStatus = 'Successfully Disonnected';
+    //   },
+    //   function() {
+    //     $scope.blMsgStatus = 'Error on Connection';
+    //   }
+    // );
+  }
 ///////////////////// Modal Settings ////////////
 
   $ionicModal.fromTemplateUrl('templates/modal.html', {
@@ -365,6 +391,27 @@ $scope.writeBluetooth = function(time, data){
   $scope.inputs = {
     fileName : ''
   }
+  $scope.totalTime = '';
+  $scope.totalTimeHeader = '';
+  activate();
+  function activate(){
+    $scope.totalTime = 0;
+    angular.forEach($rootScope.keyFrames, function(data){
+      $scope.totalTime += ( parseInt(data.duration) + parseInt(data.delay) );
+      console.log($scope.totalTime);
+      convertSecondsToTime();
+    });
+  }
+
+  function convertSecondsToTime(){
+    var totalSec = $scope.totalTime;
+    var hours = parseInt( totalSec / 3600 ) % 24;
+    var minutes = parseInt( totalSec / 60 ) % 60;
+    var seconds = totalSec % 60;
+
+    var result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+    $scope.totalTimeHeader = result;
+  }
   $scope.saveStack = function() {
     document.addEventListener('deviceready', function () {
       $cordovaFile.writeFile('file:/sdcard/autoCrane', $scope.inputs.fileName + '.json', $rootScope.keyFrames, true)
@@ -408,8 +455,8 @@ $scope.writeBluetooth = function(time, data){
       $scope.move.tilt = data.tilt;
       $scope.move.slider = data.slider;
       $scope.move.offset = data.offset;
-      $scope.move.delay = data.delay;
-      $scope.move.duration = data.duration;
+      $scope.move.delay = parseInt(data.delay);
+      $scope.move.duration = parseInt(data.duration);
     } else {
       $scope.move = {};
 
@@ -431,7 +478,8 @@ $scope.writeBluetooth = function(time, data){
   $scope.saveMove = function(id) {
     if(id !== undefined){
       $rootScope.keyFrames[id] = $scope.move;
-      console.log($rootScope.keyFrames[id]);
+      activate();
+      console.log($scope.totalTime);
     } else {
       var id = '';
       if($rootScope.keyFrames !== undefined){
@@ -440,6 +488,7 @@ $scope.writeBluetooth = function(time, data){
         id = 0;
       }
       $scope.move.id =  id;
+      activate();
       $rootScope.keyFrames.push($scope.move);
     }
     $scope.modal.hide();
@@ -545,9 +594,9 @@ $scope.writeBluetooth = function(time, data){
       }
     );
   }
-  $interval(function(){
-    $scope.readBufferBT();
-  }, 1000);
+  // $interval(function(){
+  //   $scope.readBufferBT();
+  // }, 1000);
   $scope.checkBT(2000);
 })
 

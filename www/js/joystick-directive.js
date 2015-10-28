@@ -54,7 +54,6 @@ angular.module('starter.joystick', []).directive('joystick', function() {
             function onTouchStart(event) {
                 var touch = event.targetTouches[0];
                 cursorTouchId = touch.identifier;
-                console.log(touch.pageX);
                 cursorTouch = {
                     x : touch.pageX - touch.target.offsetLeft,
                     y : touch.pageY - scope.offset
