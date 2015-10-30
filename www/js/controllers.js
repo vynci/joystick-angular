@@ -6,7 +6,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('PlaylistsCtrl', function($rootScope, $scope, $cordovaBluetoothSerial, $timeout, $ionicModal, $interval) {
+.controller('PlaylistsCtrl', function($rootScope, $scope, $cordovaBluetoothSerial, $timeout, $ionicModal, $interval, $window) {
   $scope.size = 130;
   $scope.panProgress = 0.50;
   $scope.strokeWidth = 10;
@@ -37,6 +37,9 @@ angular.module('starter.controllers', [])
       y : 0.5
   };
 
+  $scope.currentPan = '';
+  $scope.currentTilt = '';
+
   $scope.slider = 125;
 
   $scope.panTiltJoystickValue = {
@@ -55,7 +58,7 @@ angular.module('starter.controllers', [])
     if($scope.position.x !== undefined){
       return $scope.position.x;
     }
-  }, function(newVal, oldVal){
+  }, _.debounce(function(newVal, oldVal){
     if(newVal !== oldVal){
       if($scope.offset === 167){
         if($scope.position.x === 100){
@@ -65,19 +68,13 @@ angular.module('starter.controllers', [])
         }
       } else {
         if($scope.position.y === 100){
-          console.log('pt-up');
-          //$scope.goToXYZ(0,$scope.duration,0,'x',179,125);
+          $scope.goToXYZ(0,$scope.duration,0,$scope.currentPan,179,125);
         } else if($scope.position.y === -100) {
-          console.log('pt-down');
-          //$scope.goToXYZ(0,$scope.duration,0,'x',-179,125);
-        }
-
-        if($scope.position.x === 100){
-          console.log('pt-left');
-          //$scope.goToXYZ(0,$scope.duration,0,179,'x',125);
+          $scope.goToXYZ(0,$scope.duration,0,$scope.currentPan,-179,125);
+        } else if($scope.position.x === 100){
+          $scope.goToXYZ(0,$scope.duration,0,179,$scope.currentTilt,125);
         } else if($scope.position.x === -100) {
-          console.log('pt-right');
-          //$scope.goToXYZ(0,$scope.duration,0,-179,'x',125);
+          $scope.goToXYZ(0,$scope.duration,0,-179,$scope.currentTilt,125);
         }
 
       }
@@ -87,7 +84,7 @@ angular.module('starter.controllers', [])
       }
     }
 
-  });
+  },250));
 
   $scope.incDuration = function(){
     $scope.duration += 1;
@@ -294,7 +291,7 @@ $scope.goHome = function(time, data){
 
 $scope.writeBluetooth = function(time, data){
   console.log(data);
-  // $timeout(function () {
+  $timeout(function () {
     $cordovaBluetoothSerial.write(data).then(
       function() {
         $scope.blMsgStatus = data;
@@ -303,9 +300,9 @@ $scope.writeBluetooth = function(time, data){
         $scope.blMsgStatus = 'Error';
       }
     );
-  //  },time);
+   },time);
 
-  //  $timeout(function () {
+   $timeout(function () {
      $cordovaBluetoothSerial.write(data).then(
        function() {
          $scope.blMsgStatus = data;
@@ -314,7 +311,30 @@ $scope.writeBluetooth = function(time, data){
          $scope.blMsgStatus = 'Error';
        }
      );
-  //  },time + 250);
+   },time + 250);
+
+   $timeout(function () {
+     $cordovaBluetoothSerial.write(data).then(
+       function() {
+         $scope.blMsgStatus = data;
+       },
+       function() {
+         $scope.blMsgStatus = 'Error';
+       }
+     );
+   },time + 250);
+
+   $timeout(function () {
+     $cordovaBluetoothSerial.write(data).then(
+       function() {
+         $scope.blMsgStatus = data;
+       },
+       function() {
+         $scope.blMsgStatus = 'Error';
+       }
+     );
+   },time + 250);
+
 
 }
 
@@ -354,7 +374,17 @@ $scope.writeBluetooth = function(time, data){
   $scope.readBufferBT = function(){
     $cordovaBluetoothSerial.read().then(
       function(data) {
-        $scope.bluetoothRx = data;
+        var tmp = data.split(',');
+
+        var pan = tmp[0].split('P');
+        pan = pan[2];
+        var tilt = tmp[1];
+        if(pan !== undefined && tilt !== undefined){
+          $scope.currentPan = pan;
+          $scope.currentTilt = tilt;
+          $scope.bluetoothRx = pan + ' : ' + tilt;
+        }
+
       },
       function(err) {
         $scope.bluetoothRx = err;
@@ -379,9 +409,13 @@ $scope.writeBluetooth = function(time, data){
     );
   }
 
-  // $interval(function(){
-  //   $scope.readBufferBT();
-  // }, 1000);
+  $interval(function(){
+    $scope.readBufferBT();
+  }, 75);
+  // $window.bluetoothSerial.subscribe('\n', function (data) {
+  //   $scope.bluetoothRx = data;
+  // //do something with data
+  // });
 
   $scope.checkBT(2000);
   $scope.bluetoothRx = 'data';
