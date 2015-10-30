@@ -54,8 +54,32 @@ angular.module('starter.cloud-storage', [])
       }
     });
   };
+
+  $scope.doSignup = function() {
+    //Create a new user on Parse
+    console.log('Doing signup', $scope.loginData);
+    var user = new Parse.User();
+    user.set("username", $scope.loginData.username);
+    user.set("password", $scope.loginData.password);
+
+    user.signUp(null, {
+      success: function(user) {
+        // Hooray! Let them use the app now.
+        $rootScope.user.user = user;
+        $rootScope.user.id = user.id;
+        $rootScope.user.username = user.attributes.username;
+        $scope.closeLogin();
+        getMoves();
+      },
+      error: function(user, error) {
+        // Show the error message somewhere and let the user try again.
+        alert("Error: " + error.code + " " + error.message);
+      }
+    });
+
+  }
   function getMoves(){
-    var User = $rootScope.user.user;
+    var User = Parse.User.current();
     var MoveStackObject = Parse.Object.extend("MoveStack");
     var query = new Parse.Query(MoveStackObject);
     query.equalTo("user", User);

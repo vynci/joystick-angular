@@ -6,7 +6,7 @@
     </div>
   </ion-header-bar>
   <ion-content class="background">
-    <form ng-submit="doLogin()">
+    <!-- <form> -->
       <div class="info list">
         <label class="item item-input">
           <span class="input-label info">Username</span>
@@ -16,11 +16,9 @@
           <span class="input-label info">Password</span>
           <input type="password" class="info" ng-model="loginData.password">
         </label>
-        <label class="item">
-          <button class="button button-block button-balanced" type="submit">Sign in</button>
-          <button class="button button-block button-assertive" type="submit">Sign up</button>
-        </label>
+          <button class="button button-block button-balanced" ng-click="doLogin()" type="button">Sign in</button>
+          <button class="button button-block button-assertive" ng-click="doSignup()" type="button">Sign up</button>
       </div>
-    </form>
+    <!-- </form> -->
   </ion-content>
 </ion-modal-view>

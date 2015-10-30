@@ -384,7 +384,7 @@ $scope.writeBluetooth = function(time, data){
         $rootScope.keyFrames = tmp;
         $scope.bluetoothRx = 'file ' + $scope.inputs.fileName + ' loaded!';
       }, function (error) {
-        $scope.bluetoothRx = 'error';
+        $scope.bluetoothRx = 'error!';
       });
     });
   }

@@ -1,9 +1,12 @@
-<ion-view view-title="Cloud Storage">
+`````````<ion-view view-title="Cloud Storage">
   <ion-content>
     <button class="button button-block button-assertive" ng-click="logout()">
       Logout
     </button>
     <ion-list>
+      <div class="item item-divider info center-item">
+        Cloud
+      </div>
       <ion-item class="info" ng-repeat="item in moveStacks">
         {{item.attributes.name}}
       </ion-item>
