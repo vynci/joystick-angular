@@ -6,21 +6,26 @@
     </div>
     <div class="list">
 
-      <div class="item item-button-right info">
-        <b><i class="icon ion-bluetooth"></i></b>
-        HC-05 Arduino
-        <button class="button button-assertive">
-          <i class="icon ion-ios-gear"></i>
-        </button>
-      </div>
+      <a class="item" href="#">
+        <span class="info">Pan/Tilt</span>
+        <span class="info item-note">
+          ProLinkPT15605
+        </span>
+      </a>
+
+      <a class="item" href="#">
+        <span class="info">Slider</span>
+        <span class="info item-note">
+          ProLinkSL153577
+        </span>
+      </a>
 
 
     </div>
     <div class="title-bar">
-      <h4 class="info">Available Devices:</h4>
+      <h4 class="info">Choose for Pan/Tilt:</h4>
     </div>
     <div class="list">
-
       <ion-item ng-repeat="device in btDevices"
                 class="item item-button-right info">
           <b><i class="icon ion-bluetooth"></i></b>
@@ -30,6 +35,21 @@
           </button>
       </ion-item>
     </div>
+
+    <div class="title-bar">
+      <h4 class="info">Choose for Slider:</h4>
+    </div>
+    <div class="list">
+      <ion-item ng-repeat="device in btDevices"
+                class="item item-button-right info">
+          <b><i class="icon ion-bluetooth"></i></b>
+          {{device.name}}
+          <button class="button button-assertive" ng-click="connectBT(device.id)">
+            <i class="icon ion-link"></i>
+          </button>
+      </ion-item>
+    </div>
+
     <div class="row">
       <div class="col">
         <button class="button button-block button-assertive" ng-click="listBT()">

@@ -1,13 +1,16 @@
 <ion-modal-view>
-  <ion-header-bar class="bar-dark">
+  <!-- <ion-header-bar class="bar-dark">
     <h1 class="title">Login</h1>
     <div class="buttons">
       <button class="button button-clear" ng-click="closeLogin()">Close</button>
     </div>
-  </ion-header-bar>
+  </ion-header-bar> -->
   <ion-content class="background">
     <!-- <form> -->
-      <div class="info list">
+      <div class="login-logo-container">
+        <img class="login-logo-img" src="img/steadyTracker.png">
+      </div>
+      <div class="info black-bg list list-inset">
         <label class="item item-input">
           <span class="input-label info">Username</span>
           <input type="text" class="info" ng-model="loginData.username">
@@ -16,7 +19,7 @@
           <span class="input-label info">Password</span>
           <input type="password" class="info" ng-model="loginData.password">
         </label>
-          <button class="button button-block button-balanced" ng-click="doLogin()" type="button">Sign in</button>
+          <button class="button button-block button-dark" ng-click="doLogin()" type="button">Sign in</button>
           <button class="button button-block button-assertive" ng-click="doSignup()" type="button">Sign up</button>
       </div>
     <!-- </form> -->

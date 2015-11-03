@@ -1,9 +1,9 @@
 angular.module('starter.cloud-storage', [])
 
-.controller('CloudStorageCtrl', function($scope, $rootScope, $ionicModal, $state) {
+.controller('CloudStorageCtrl', function($scope, $rootScope, $ionicModal, $state, $cordovaFile, $ionicPopup) {
 
   $scope.loginData = {};
-  $scope.moveStacks = [];
+  $scope.cloudMoveStacks = [];
   // Create the login modal that we will use later
 
   // Triggered in the login modal to close it
@@ -13,6 +13,7 @@ angular.module('starter.cloud-storage', [])
 
   // Open the login modal
   function activate() {
+    console.log('activate');
     $ionicModal.fromTemplateUrl('templates/login.html', {
       scope: $scope
     }).then(function(modal) {
@@ -21,7 +22,7 @@ angular.module('starter.cloud-storage', [])
       if (!currentUser) {
         $scope.modal.show();
       } else {
-        console.log(currentUser);
+
         getMoves();
       }
     });
@@ -46,6 +47,7 @@ angular.module('starter.cloud-storage', [])
         $rootScope.user.id = user.id;
         $rootScope.user.username = user.attributes.username;
         $scope.closeLogin();
+
         getMoves();
       },
       error: function(user, error) {
@@ -69,6 +71,7 @@ angular.module('starter.cloud-storage', [])
         $rootScope.user.id = user.id;
         $rootScope.user.username = user.attributes.username;
         $scope.closeLogin();
+
         getMoves();
       },
       error: function(user, error) {
@@ -83,12 +86,78 @@ angular.module('starter.cloud-storage', [])
     var MoveStackObject = Parse.Object.extend("MoveStack");
     var query = new Parse.Query(MoveStackObject);
     query.equalTo("user", User);
-    query.find({
-      success: function(moveStacks) {
-        console.log(moveStacks);
-        $scope.moveStacks = moveStacks;
+    query.find().then(function(results) {
+      // Create a trivial resolved promise as a base case.
+      $scope.cloudMoveStacks = results;
+      $scope.isLoading = true;
+
+    }).then(function() {
+      // Every comment was deleted.
+    });
+  }
+  $scope.saveStackToLocal = function( obj ){
+    console.log(obj);
+    document.addEventListener('deviceready', function () {
+      var data = {
+        stackId : $rootScope.moveStacks.length,
+        stackName : obj.stackName,
+        keyFrames : obj.keyFrames
+      }
+      $rootScope.moveStacks.push(data);
+      $cordovaFile.writeFile(cordova.file.dataDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
+       .then(function (success) {
+         alert(obj.stackName + ' Saved to Local');
+       }, function (error) {
+         alert('Error on Save');
+      });
+    });
+  }
+
+  $scope.saveStackToCloud = function( data ){
+    console.log(data);
+    var keyFrames = _.map(data.keyFrames, function( data ){
+      delete data.$$hashKey;
+      return data;
+    });
+    var user = Parse.User.current();
+    var Stack = Parse.Object.extend("MoveStack");
+    var stack = new Stack();
+    stack.set("stackId", data.stackId.toString());
+    stack.set("stackName", data.stackName);
+    stack.set("keyFrames", keyFrames);
+    stack.set("user", user);
+    stack.save(null, {
+      success: function(post) {
+        console.log(post);
+        alert(data.stackName + ' Uploaded to Cloud');
+        getMoves();
       }
     });
+  }
+
+  $scope.deleteStackFromCloud = function(stack){
+
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Stack Move: ' + stack.attributes.stackName,
+      template: 'Are you sure you want to delete this'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        stack.destroy({
+          success: function(myObject) {
+            alert('Stack deleted from cloud');
+            getMoves();
+          },
+          error: function(myObject, error) {
+            alert('error on delete');
+          }
+        });
+      } else {
+        console.log('You are not sure');
+      }
+    });
+
+
   }
 
   activate();

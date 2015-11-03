@@ -1,4 +1,4 @@
-`````````<ion-view view-title="Cloud Storage">
+<ion-view view-title="Cloud Storage">
   <ion-content>
     <button class="button button-block button-assertive" ng-click="logout()">
       Logout
@@ -7,8 +7,34 @@
       <div class="item item-divider info center-item">
         Cloud
       </div>
-      <ion-item class="info" ng-repeat="item in moveStacks">
-        {{item.attributes.name}}
+      <div ng-hide="isLoading" class="item item-divider info center-item">
+        <ion-spinner icon="lines"></ion-spinner>
+      </div>
+
+      <ion-item class="info" ng-repeat="item in cloudMoveStacks" style="padding: 0px;">
+        <div class="row">
+          <div class="col col-67">{{item.attributes.stackName}}</div>
+          <div class="col">
+            <button class="button button-small button-assertive" ng-click="deleteStackFromCloud(item)">
+              <i class="icon ion-trash-a"></i>
+            </button>
+          </div>
+          <div class="col">
+            <button class="button button-small button-balanced" ng-click="saveStackToLocal(item.attributes)">
+              <i class="icon ion-arrow-down-a"></i>
+            </button>
+          </div>
+        </div>
+      </ion-item>
+
+      <div class="item item-divider info center-item">
+        Local
+      </div>
+      <ion-item class="info item-button-right" ng-repeat="item in moveStacks track by $index">
+        {{item.stackName}}
+        <button class="button button-assertive" ng-click="saveStackToCloud(item)">
+          <i class="icon ion-arrow-up-a"></i>
+        </button>
       </ion-item>
     </ion-list>
   </ion-content>

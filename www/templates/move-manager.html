@@ -5,121 +5,13 @@
     </div>
 
     <ion-list>
-      <button ng-style="{ 'width' : (((item.delay + item.duration)/totalTime)*10) + '%' }" class="button button-small button-outline button-balanced" ng-repeat="item in keyFrames" ng-click="openModal(item)">
+      <!-- <button ng-style="{ 'width' : (((item.delay + item.duration)/totalTime)*10) + '%' }" class="button button-small button-outline button-balanced" ng-repeat="item in keyFrames.keyFrames" ng-click="openModal(item)">
+        {{item.name}} : {{item.delay}} : {{item.duration}}
+      </button> -->
+      <button class="button button-small button-block button-outline button-balanced" ng-repeat="item in keyFrames.keyFrames" ng-click="openModal(item)">
         {{item.name}} : {{item.delay}} : {{item.duration}}
       </button>
     </ion-list>
-
-      <!-- <div class="col col-25">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveA <span class="royal">00:..</span>
-          </button>
-        </div>
-        <div class="col col-75">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveB <span class="royal">00:00:25</span>
-          </button>
-        </div>
-
-      </div>
-
-      <div class="row button-header">
-        <div class="col col-10">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            M.
-          </button>
-        </div>
-        <div class="col col-30">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveD <span class="royal">00:00:40</span>
-          </button>
-        </div>
-        <div class="col col-20">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveE..
-          </button>
-        </div>
-        <div class="col col-40">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveF <span class="royal">00:01:01</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="row button-header">
-        <div class="col col-30">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveG <span class="royal">00:01:..</span>
-          </button>
-        </div>
-        <div class="col col-30">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveH <span class="royal">00:01..</span>
-          </button>
-        </div>
-        <div class="col col-10">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            M.
-          </button>
-        </div>
-        <div class="col col-30">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveJ <span class="royal">00:01..</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="row button-header">
-        <div class="col col-40">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveK <span class="royal">00:02:40</span>
-          </button>
-        </div>
-        <div class="col col-60">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveL <span class="royal">00:03:00</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="row button-header">
-        <div class="col col-60">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveM <span class="royal">00:03:30</span>
-          </button>
-        </div>
-        <div class="col col-20">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveN <span class="royal">..</span>
-          </button>
-        </div>
-        <div class="col col-20">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveO <span class="royal">..</span>
-          </button>
-        </div>
-
-        </div>
-      </div>
-
-      <div class="row button-header">
-        <div class="col col-40">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveP <span class="royal">00:04:10</span>
-          </button>
-        </div>
-        <div class="col col-30">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveQ <span class="royal">00:04:40</span>
-          </button>
-        </div>
-        <div class="col col-30">
-          <button class="button button-small button-outline button-block button-balanced" ng-click="openModal()">
-            MoveR <span class="royal">00:05:01</span>
-          </button>
-        </div>
-
-      </div> -->
 
     <br>
 
@@ -136,7 +28,7 @@
       </div>
       <div class="col">
         <button class="button button-block button-assertive" ng-click="openModal()">
-          <i class="icon ion-trash-a"></i>
+          <i class="icon ion-stop"></i>
         </button>
       </div>
       <div class="col">
@@ -145,32 +37,30 @@
         </button>
       </div>
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="openModal()">
-          <i class="icon ion-refresh"></i>
-        </button>
-      </div>
-    </div>
-    <label class="item item-input">
-      <span class="input-label info">File:</span>
-      <input type="text" class="info" ng-model="inputs.fileName">
-    </label>
-    <div class="row">
-      <div class="col">
         <button class="button button-block button-assertive" ng-click="newStack()">
           New
         </button>
       </div>
+    </div>
+    <div class="row">
+
 
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="saveStack()">
+        <button class="button button-block button-assertive" ng-click="showPopup()">
           Save
         </button>
       </div>
 
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="loadStack()">
-          Load
+        <button class="button button-block button-assertive" ng-click="saveAsStack()">
+          Save As
         </button>
+      </div>
+
+      <div class="col">
+        <a class="button button-block button-assertive" href="#/app/load-moves">
+          Stack List
+        </a>
       </div>
     </div>
 

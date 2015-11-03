@@ -32,7 +32,7 @@ angular.module('starter.joystick', []).directive('joystick', function() {
             };
 
             var radiusCircle = 35;
-            var radiusBound = 50;
+            var radiusBound = 30;
 
             // Canvas and context element
             var container = element[0];

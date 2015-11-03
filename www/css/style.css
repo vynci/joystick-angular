@@ -60,3 +60,13 @@ circle {
     /*stroke: red;*/
     stroke-linecap: round;
 }
+
+.login-logo-container{
+  height: 215px;
+  padding-top: 30%;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+.login-logo-img{
+  width: 100%;
+}

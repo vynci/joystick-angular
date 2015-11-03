@@ -4,9 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.cloud-storage', 'starter.joystick', 'angular.circular-slider', 'angular-progress-arc'])
+angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.cloud-storage', 'starter.load-moves', 'starter.move-manager', 'starter.joystick', 'angular.circular-slider', 'angular-progress-arc', 'uuid4'])
 
-.run(function($ionicPlatform, $cordovaBluetoothSerial, $window, $rootScope) {
+.run(function($ionicPlatform, $cordovaBluetoothSerial, $window, $rootScope, $cordovaFile) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,7 +20,36 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-    $rootScope.keyFrames = [];
+
+    document.addEventListener('deviceready', function () {
+      $cordovaFile.checkFile(cordova.file.dataDirectory, 'autoCraneFile20.json')
+      .then(function (success) {
+        document.addEventListener('deviceready', function () {
+          $cordovaFile.readAsText(cordova.file.dataDirectory, 'autoCraneFile20.json')
+          .then(function (success) {
+            var tmp = JSON.parse(success);
+            $rootScope.moveStacks = tmp;
+          }, function (error) {
+            alert('file error!');
+          });
+        });
+      }, function (error) {
+        $rootScope.moveStacks = [];
+        document.addEventListener('deviceready', function () {
+          $cordovaFile.writeFile(cordova.file.dataDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
+           .then(function (success) {
+           }, function (error) {
+
+          });
+        });
+      });
+    });
+
+    $rootScope.keyFrames = {
+      stackId : '',
+      stackName : '',
+      keyFrames : []
+    };
     $rootScope.user = {};
     Parse.initialize("a84IJJ5obBZOsUqCLZ8ckwXgENogwFxy0FLoYXaZ", "LNikEZvdYv45xnMVoKuu1rs6p1ZUO3OI6Bauiu7h");
   });
@@ -62,6 +91,16 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
         'menuContent': {
           templateUrl: 'templates/move-manager.html',
           controller: 'MoveManagerCtrl'
+        }
+      }
+    })
+
+  .state('app.loadMoves', {
+      url: '/load-moves',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/load-moves.html',
+          controller: 'LoadMovesCtrl'
         }
       }
     })
