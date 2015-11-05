@@ -91,8 +91,10 @@ angular.module('starter.cloud-storage', [])
       $scope.cloudMoveStacks = results;
       $scope.isLoading = true;
 
-    }).then(function() {
+      return results;
+    }).then(function( data ) {
       // Every comment was deleted.
+      $scope.cloudMoveStacks = data;
     });
   }
   $scope.saveStackToLocal = function( obj ){
