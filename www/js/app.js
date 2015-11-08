@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.cloud-storage', 'starter.load-moves', 'starter.move-manager', 'starter.joystick', 'angular.circular-slider', 'angular-progress-arc', 'uuid4'])
+angular.module('starter', ['ionic', 'ngCordova', 'starter.move-stack-service', 'starter.controllers', 'starter.cloud-storage', 'starter.load-moves', 'starter.move-manager', 'starter.joystick', 'angular.circular-slider', 'angular-progress-arc', 'uuid4'])
 
 .run(function($ionicPlatform, $cordovaBluetoothSerial, $window, $rootScope, $cordovaFile) {
   $ionicPlatform.ready(function() {
@@ -19,6 +19,17 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
+    }
+
+    if(window.Connection) {
+      if(navigator.connection.type == Connection.NONE) {
+        $ionicPopup.confirm({
+          title: "Internet Disconnected",
+          content: "The internet is disconnected on your device."
+        })
+        .then(function(result) {
+        });
+      }
     }
 
     document.addEventListener('deviceready', function () {
@@ -51,7 +62,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       keyFrames : []
     };
     $rootScope.user = {};
-    Parse.initialize("a84IJJ5obBZOsUqCLZ8ckwXgENogwFxy0FLoYXaZ", "LNikEZvdYv45xnMVoKuu1rs6p1ZUO3OI6Bauiu7h");
+    Parse.initialize("AHkrgtmlTdQTmr03xh8qF13P5qtxVbZz8VZt70uh", "03VbiUY8LtGBvyoniz8ZbqMmYeSBf4Jspk6rsrac");
   });
 })
 

@@ -1,29 +1,57 @@
 <ion-view view-title="Cloud Storage">
   <ion-content>
-    <button class="button button-block button-assertive" ng-click="logout()">
-      Logout
-    </button>
+    <div class="row">
+      <div class="col">
+        <button class="button button-block button-stable" ng-click="refreshCloud(item)">
+          {{currentUsername}}
+        </button>
+      </div>
+      <div class="col">
+        <button class="button button-block button-calm" ng-click="refreshCloud(item)">
+          <i class="icon ion-refresh"></i>
+        </button>
+      </div>
+      <div class="col">
+        <button ng-show="isLogged" class="button button-block button-assertive" ng-click="logout()">
+          Logout
+        </button>
+        <button ng-hide="isLogged" class="button button-block button-assertive" ng-click="logout()">
+          Login
+        </button>
+      </div>
+
+    </div>
+
+
     <ion-list>
       <div class="item item-divider info center-item">
         Cloud
+
       </div>
-      <div ng-hide="isLoading" class="item item-divider info center-item">
+      <div ng-show="isLoading" class="item item-divider info center-item">
         <ion-spinner icon="lines"></ion-spinner>
       </div>
 
       <ion-item class="info" ng-repeat="item in cloudMoveStacks" style="padding: 0px;">
         <div class="row">
-          <div class="col col-67">{{item.attributes.stackName}}</div>
+          <div class="col col-67">{{item.attributes.stackName}} <br>{{item.createdAt | date:'medium'}}
+          </div>
           <div class="col">
-            <button class="button button-small button-assertive" ng-click="deleteStackFromCloud(item)">
+            <button class="button button-small button-block button-calm" ng-click="shareFromCloud(item)">
+              <i class="icon ion-android-share"></i>
+            </button>
+          </div>
+          <div class="col">
+            <button class="button button-small button-block button-assertive" ng-click="deleteStackFromCloud(item)">
               <i class="icon ion-trash-a"></i>
             </button>
           </div>
           <div class="col">
-            <button class="button button-small button-balanced" ng-click="saveStackToLocal(item.attributes)">
+            <button class="button button-small button-block button-balanced" ng-click="saveStackToLocal(item.attributes)">
               <i class="icon ion-arrow-down-a"></i>
             </button>
           </div>
+
         </div>
       </ion-item>
 

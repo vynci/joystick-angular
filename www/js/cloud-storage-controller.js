@@ -1,9 +1,10 @@
-angular.module('starter.cloud-storage', [])
+angular.module('starter.cloud-storage', ['starter.move-stack-service'])
 
-.controller('CloudStorageCtrl', function($scope, $rootScope, $ionicModal, $state, $cordovaFile, $ionicPopup) {
+.controller('CloudStorageCtrl', function($scope, $rootScope, $ionicModal, $state, $cordovaFile, $ionicPopup, MoveStackService, uuid4) {
 
   $scope.loginData = {};
   $scope.cloudMoveStacks = [];
+  $scope.data = {};
   // Create the login modal that we will use later
 
   // Triggered in the login modal to close it
@@ -14,6 +15,8 @@ angular.module('starter.cloud-storage', [])
   // Open the login modal
   function activate() {
     console.log('activate');
+    $scope.isLogged = false;
+    $scope.cloudMoveStacks = [];
     $ionicModal.fromTemplateUrl('templates/login.html', {
       scope: $scope
     }).then(function(modal) {
@@ -22,8 +25,9 @@ angular.module('starter.cloud-storage', [])
       if (!currentUser) {
         $scope.modal.show();
       } else {
-
-        getMoves();
+        $scope.currentUsername = currentUser.attributes.username;
+        $scope.isLogged = true;
+        updateCloudList();
       }
     });
   };
@@ -47,8 +51,9 @@ angular.module('starter.cloud-storage', [])
         $rootScope.user.id = user.id;
         $rootScope.user.username = user.attributes.username;
         $scope.closeLogin();
-
-        getMoves();
+        $scope.isLogged = true;
+        $scope.currentUsername = user.attributes.username;
+        updateCloudList();
       },
       error: function(user, error) {
         // The login failed. Check error to see why.
@@ -71,8 +76,9 @@ angular.module('starter.cloud-storage', [])
         $rootScope.user.id = user.id;
         $rootScope.user.username = user.attributes.username;
         $scope.closeLogin();
-
-        getMoves();
+        $scope.isLogged = true;
+        $scope.currentUsername = currentUser.attributes.username;
+        updateCloudList();
       },
       error: function(user, error) {
         // Show the error message somewhere and let the user try again.
@@ -81,27 +87,33 @@ angular.module('starter.cloud-storage', [])
     });
 
   }
-  function getMoves(){
-    var User = Parse.User.current();
-    var MoveStackObject = Parse.Object.extend("MoveStack");
-    var query = new Parse.Query(MoveStackObject);
-    query.equalTo("user", User);
-    query.find().then(function(results) {
-      // Create a trivial resolved promise as a base case.
-      $scope.cloudMoveStacks = results;
-      $scope.isLoading = true;
 
-      return results;
-    }).then(function( data ) {
-      // Every comment was deleted.
-      $scope.cloudMoveStacks = data;
+  function updateCloudList( data ){
+    $scope.isLoading = true;
+    MoveStackService.getMoves()
+      .then(function(results) {
+        // Handle the result
+        console.log(results);
+        $scope.isLoading = false;
+        $scope.cloudMoveStacks = results;
+        return results;
+      }, function(err) {
+        // Error occurred
+        console.log(error);
+      }, function(percentComplete) {
+
     });
   }
+
+  $scope.refreshCloud = function(){
+    updateCloudList();
+  }
+
   $scope.saveStackToLocal = function( obj ){
     console.log(obj);
     document.addEventListener('deviceready', function () {
       var data = {
-        stackId : $rootScope.moveStacks.length,
+        stackId : uuid4.generate(),
         stackName : obj.stackName,
         keyFrames : obj.keyFrames
       }
@@ -130,9 +142,7 @@ angular.module('starter.cloud-storage', [])
     stack.set("user", user);
     stack.save(null, {
       success: function(post) {
-        console.log(post);
-        alert(data.stackName + ' Uploaded to Cloud');
-        getMoves();
+        updateCloudList();
       }
     });
   }
@@ -148,7 +158,7 @@ angular.module('starter.cloud-storage', [])
         stack.destroy({
           success: function(myObject) {
             alert('Stack deleted from cloud');
-            getMoves();
+            updateCloudList();
           },
           error: function(myObject, error) {
             alert('error on delete');
@@ -160,6 +170,53 @@ angular.module('starter.cloud-storage', [])
     });
 
 
+  }
+
+  $scope.shareFromCloud = function(stack){
+    var myPopup = $ionicPopup.show({
+      template: '<input type="text" ng-model="data.moveStack">',
+      title: 'Share stack move: ' + stack.attributes.stackName,
+      subTitle: 'Enter Email Address',
+      scope: $scope,
+      buttons: [ { text: 'Cancel' },
+        {
+          text: '<b>Share</b>',
+          type: 'button-balanced',
+          onTap: function(e) {
+            if (!$scope.data.moveStack) {
+              //don't allow the user to close unless he enters wifi password
+              e.preventDefault();
+            } else {
+              return $scope.data.moveStack;
+            }
+          }
+        }
+      ]
+      });
+      myPopup.then(function(res) {
+        if(res){
+          console.log(res);
+          var query = new Parse.Query(Parse.User);
+          query.equalTo('username',res);
+          query.first().then(function(user) {
+            console.log(stack);
+            var Stack = Parse.Object.extend("MoveStack");
+            var sharedStack = new Stack();
+            sharedStack.set("stackId", stack.attributes.stackId);
+            sharedStack.set("stackName", stack.attributes.stackName);
+            sharedStack.set("keyFrames", stack.attributes.keyFrames);
+            sharedStack.set("user", user);
+            sharedStack.save(null, {
+              success: function(post) {
+                alert('Successfully shared to ' + res);
+              }
+            });
+          }, function(err) {
+            alert('Cannot Find User');
+          });
+        }
+
+      });
   }
 
   activate();

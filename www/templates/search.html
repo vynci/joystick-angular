@@ -23,21 +23,7 @@
 
     </div>
     <div class="title-bar">
-      <h4 class="info">Choose for Pan/Tilt:</h4>
-    </div>
-    <div class="list">
-      <ion-item ng-repeat="device in btDevices"
-                class="item item-button-right info">
-          <b><i class="icon ion-bluetooth"></i></b>
-          {{device.name}}
-          <button class="button button-assertive" ng-click="connectBT(device.id)">
-            <i class="icon ion-link"></i>
-          </button>
-      </ion-item>
-    </div>
-
-    <div class="title-bar">
-      <h4 class="info">Choose for Slider:</h4>
+      <h4 class="info">Choose Device</h4>
     </div>
     <div class="list">
       <ion-item ng-repeat="device in btDevices"

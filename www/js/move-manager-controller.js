@@ -1,6 +1,6 @@
 angular.module('starter.move-manager', [])
 
-.controller('MoveManagerCtrl', function($rootScope, $scope, $cordovaBluetoothSerial, $ionicModal, $timeout, $interval, $cordovaFile, $state, $ionicPopup) {
+.controller('MoveManagerCtrl', function($rootScope, $scope, $cordovaBluetoothSerial, $ionicModal, $timeout, $interval, $cordovaFile, $state, $ionicPopup, uuid4) {
   console.log('hello move manager!');
   $scope.inputs = {
     fileName : ''
@@ -32,12 +32,12 @@ angular.module('starter.move-manager', [])
       alert('overwrite!');
       document.addEventListener('deviceready', function () {
         alert('overwriting on ' + $rootScope.keyFrames.stackId);
-        // _.each($rootScope.moveStacks, function(moveStack){
-        //   if(moveStack === $rootScope.keyFrames.stackId){
-        //     $rootScope.moveStacks[_.indexOf($rootScope.moveStacks, moveStack)].keyFrames = $rootScope.keyFrames.keyFrames;
-        //   }
-        // });
-        $rootScope.moveStacks[$rootScope.keyFrames.stackId].keyFrames = $rootScope.keyFrames.keyFrames;
+        _.each($rootScope.moveStacks, function(moveStack){
+          if(moveStack === $rootScope.keyFrames.stackId){
+            $rootScope.moveStacks[_.indexOf($rootScope.moveStacks, moveStack)].keyFrames = $rootScope.keyFrames.keyFrames;
+          }
+        });
+        // $rootScope.moveStacks[$rootScope.keyFrames.stackId].keyFrames = $rootScope.keyFrames.keyFrames;
         console.log($rootScope.moveStacks);
         $cordovaFile.writeFile(cordova.file.dataDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
          .then(function (success) {
@@ -49,11 +49,12 @@ angular.module('starter.move-manager', [])
     } else {
       document.addEventListener('deviceready', function () {
         var data = {
-          stackId : $rootScope.moveStacks.length,
+          stackId : uuid4.generate(),
           stackName : fileName,
           keyFrames : $rootScope.keyFrames.keyFrames
         }
         $rootScope.moveStacks.push(data);
+        console.log($rootScope);
         $cordovaFile.writeFile(cordova.file.dataDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
          .then(function (success) {
            alert('Created New Stack');
