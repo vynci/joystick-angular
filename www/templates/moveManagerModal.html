@@ -1,8 +1,10 @@
-<div class="modal">
-  <ion-header-bar class="bar-dark">
+<div class="modal-background modal">
+
+  <ion-header-bar ng-show="isPhone" class="bar-dark">
   <h1 class="title">Add Move</h1>
   </ion-header-bar>
-  <ion-content class="background">
+
+  <ion-content ng-class="{'modal-settings': !isPhone}" class="background">
     <div class="list info">
 
       <label class="item item-input">
@@ -14,7 +16,7 @@
         Set Offset
       </div>
       <div class="range range-assertive">
-        {{move.offset}}
+        <span class="tablet-size-indicator">{{move.offset}}</span>
         <input type="range" name="volume" min="0" max="100" ng-model="move.offset">
       </div>
 
@@ -50,6 +52,12 @@
       </label>
 
 
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <button class="button button-block button-royal" ng-click="testMove(move)">Test Current Move</button>
+      </div>
     </div>
 
     <div class="row">

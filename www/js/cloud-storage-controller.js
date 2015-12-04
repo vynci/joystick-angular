@@ -142,7 +142,12 @@ angular.module('starter.cloud-storage', ['starter.move-stack-service'])
     stack.set("user", user);
     stack.save(null, {
       success: function(post) {
+        alert('Uploaded to Cloud');
         updateCloudList();
+      },
+
+      error: function(){
+        alert('error!');
       }
     });
   }
@@ -208,7 +213,15 @@ angular.module('starter.cloud-storage', ['starter.move-stack-service'])
             sharedStack.set("user", user);
             sharedStack.save(null, {
               success: function(post) {
-                alert('Successfully shared to ' + res);
+                Parse.Cloud.run("sendEmail", { "email": res },{
+                  success: function(){
+                    alert('Successfully shared to ' + res);
+                  },
+                  error: function(){
+                    alert('Error');
+                  }
+                });
+
               }
             });
           }, function(err) {

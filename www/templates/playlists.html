@@ -2,19 +2,27 @@
   <ion-content class="center-item">
     <div class="header-section">
       <div class="row button-header">
-        <div class="col col-75">
-          <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
-            Limit <span class="balanced">T: 0° P: 0° S:0 - T: 90° P: 90° S: 250</span>
+        <div class="col col-25">
+          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="goHome()">
+            <span class="info">Home</span>
           </button>
         </div>
-        <div class="col col-10">
-          <button class="button button-small button-outline button-block button-assertive" ng-click="openModal()">
+
+        <div class="col col-25">
+          <button ng-class="{'button-small': isPhone}" class="button  button-outline button-block button-assertive" ng-click="openBTSettings()">
+            <i ng-show="isPhone" class="icon ion-bluetooth info"></i><span ng-hide="isPhone">Bluetooth: </span><span ng-show="isBluetoothConnected" class="balanced"> On</span> <span ng-show="!isBluetoothConnected" class="stable"> Off</span>
+          </button>
+        </div>
+
+        <div class="col col-25">
+          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="openModal()">
             <i class="icon ion-gear-a info"></i>
           </button>
         </div>
-        <div class="col col-15">
-          <button class="button button-small button-outline button-block button-assertive" ng-click="addKeyFrame()">
-            <i class="icon ion-film-marker info"></i>
+        <div class="col col-25">
+          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="addKeyFrame()">
+            <i class="icon ion-film-marker info"> </i>
+            <span ng-hide="isPhone" class="info"> KeyFrame+</span>
           </button>
         </div>
       </div>
@@ -22,123 +30,136 @@
       <div class="row button-header">
 
         <div class="col">
-          <button class="button button-small button-outline button-block button-assertive" ng-click="goHome()">
-            <span class="info">Home</span>
-          </button>
-        </div>
-
-        <div class="col">
-          <button class="button button-small button-outline button-block button-assertive" ng-click="showSliderJoystick()">
+          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="showSliderJoystick()">
             <span class="info">Slider</span>
           </button>
         </div>
 
         <div class="col">
-          <button class="button button-small button-outline button-block button-assertive" ng-click="showPanTiltJoystick()">
+          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="showPanTiltJoystick()">
             <span class="info">Pan/Tilt</span>
           </button>
         </div>
 
         <div class="col">
-          <button class="button button-small button-outline button-block button-assertive" ng-click="updateAllPosition()">
+          <button ng-hide="isLoop" ng-class="{'button-small': isPhone}" class="button button-block button-assertive" ng-click="enableLoop()">
+            <i class="icon ion-ios-loop-strong"> Loop Off</i>
+          </button>
+          <button ng-show="isLoop" ng-class="{'button-small': isPhone}" class="button button-block button-balanced" ng-click="disableLoop()">
+            <i class="icon ion-ios-loop-strong"> Loop On</i>
+          </button>
+
+        </div>
+
+        <div class="col">
+          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="updateAllPosition()">
             <span class="info">Update</span>
           </button>
         </div>
       </div>
     </div>
-    <div>
-      <span class="info">Slider: {{slider}}</span>
-      <span class="info">BT: <span>{{bluetoothRx}}</span></span>
-      <!-- <span class="info">BT: {{bluetoothAvailable}}</span> -->
-    </div>
 
-    <div ng-show="isSliderJoystick" class="slider-joystick">
-      <joystick position="sliderJoystickValue" offset="159"></joystick>
-    </div>
+    <div ng-class="{'slider-tablet': !isPhone}">
+      <div ng-class="{'font-indicator': !isPhone}">
+        <span class="info">Current Position: <span>{{bluetoothRx}}</span></span>
+        <br ng-hide="isPhone">
+        <br ng-hide="isPhone">
+        <span class="info">Slider: {{sliderPosition.slider}}</span>
 
-    <div ng-show="!isSliderJoystick" class="slider-joystick">
-      <div class="range range-assertive">
-        <i class="icon ion-ios-arrow-left info"></i>
-        <input type="range" name="volume" min="0" max="495" value="125" ng-model="slider">
-        <i class="icon ion-ios-arrow-right info"></i>
+
+        <!-- <span class="info">BT: {{bluetoothAvailable}}</span> -->
+      </div>
+
+      <div ng-show="isSliderJoystick" class="slider-joystick">
+        <joystick position="sliderJoystickValue" devType="slider" offset="12"></joystick>
+      </div>
+
+      <div ng-show="!isSliderJoystick" class="slider-joystick">
+        <div class="range range-assertive">
+          <i class="icon ion-ios-arrow-left info"></i>
+          <input type="range" name="volume" min="-495" max="495" value="125" ng-model="sliderPosition.slider">
+          <i class="icon ion-ios-arrow-right info"></i>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <button class="button button-outline button-block button-assertive" ng-click="fastDecSlider()">
+              <i class="icon ion-ios-arrow-back info"></i><i class="icon ion-ios-arrow-back info"></i>
+            </button>
+          </div>
+          <div class="col">
+            <button class="button button-outline button-block button-balanced" ng-click="decSlider()">
+              <i class="icon ion-ios-arrow-back info"></i>
+            </button>
+          </div>
+          <div class="col">
+            <button class="button button-block button-assertive" ng-click="centerSlider()">
+              0
+            </button>
+          </div>
+          <div class="col">
+            <button class="button button-outline button-block button-balanced" ng-click="incSlider()">
+              <i class="icon ion-ios-arrow-forward info"></i>
+            </button>
+          </div>
+          <div class="col">
+            <button class="button button-outline button-block button-assertive" ng-click="fastIncSlider()">
+              <i class="icon ion-ios-arrow-forward info"></i><i class="icon ion-ios-arrow-forward info"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div ng-class="{'pan-tilt-tablet': !isPhone}">
+      <div ng-class="{'font-indicator': !isPhone}">
+
+        <span class="info">Pan: {{pos.x >= 0.5 ? ((pos.x * 360)-360) : (pos.x * 360) | number: 1}}°</span>
+        <span class="info">Tilt: {{pos.y >= 0.5 ? ((pos.y * 360)-360) : (pos.y * 360) | number: 1}}°</span>
+      </div>
+      <div ng-show="isPantilt" ng-class="{'animated infinite pulse' : isPantilt && !isPhone}" class="test-indicator">
+      </div>
+      <div ng-show="isPanTiltJoystick">
+        <joystick position="panTiltJoystickValue" devType="pan-tilt" offset="pan-tilt" on-touch="panTiltOnStart()" on-release="panTiltOnEnd()"></joystick>
       </div>
 
       <div class="row">
         <div class="col">
-          <button class="button button-outline button-block button-assertive" ng-click="fastDecSlider()">
-            <i class="icon ion-ios-arrow-back info"></i><i class="icon ion-ios-arrow-back info"></i>
-          </button>
-        </div>
-        <div class="col">
-          <button class="button button-outline button-block button-balanced" ng-click="decSlider()">
-            <i class="icon ion-ios-arrow-back info"></i>
-          </button>
-        </div>
-        <div class="col">
-          <button class="button button-block button-assertive" ng-click="centerSlider()">
-            0
-          </button>
-        </div>
-        <div class="col">
-          <button class="button button-outline button-block button-balanced" ng-click="incSlider()">
-            <i class="icon ion-ios-arrow-forward info"></i>
-          </button>
-        </div>
-        <div class="col">
-          <button class="button button-outline button-block button-assertive" ng-click="fastIncSlider()">
-            <i class="icon ion-ios-arrow-forward info"></i><i class="icon ion-ios-arrow-forward info"></i>
-          </button>
-        </div>
-      </div>
-
-    </div>
-    <div>
-
-      <span class="info">Pan: {{pos.x >= 0.5 ? ((pos.x * 360)-360) : (pos.x * 360) | number: 1}}°</span>
-      <span class="info">Tilt: {{pos.y >= 0.5 ? ((pos.y * 360)-360) : (pos.y * 360) | number: 1}}°</span>
-    </div>
-
-    <div ng-show="isPanTiltJoystick">
-      <joystick position="panTiltJoystickValue" offset="385" on-touch="panTiltOnStart()" on-release="panTiltOnEnd()"></joystick>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <div ng-show="!isPanTiltJoystick">
-          <progress-arc
-              size="{{ size }}"
-              stroke="{{ stroke }}"
-              stroke-width="{{ strokeWidth }}"
-              complete="pos.x"
-              background="{{ background }}"
-              counter-clockwise="{{ counterClockwise }}"></progress-arc>
-          <div class="control">
-              <div class="range range-assertive">
-                <input type="range" min="0" max="1" step="0.01" ng-model="pos.x" id="pos.x">
-              </div>
-              <!-- <span class="info">{{ pos.x * 360 | number: 2 }}°</span> -->
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div ng-show="!isPanTiltJoystick">
-          <progress-arc
-              size="{{ size }}"
-              stroke="{{ stroke }}"
-              stroke-width="{{ strokeWidth }}"
-              complete="pos.y"
-              background="{{ background }}"
-              counter-clockwise="{{ counterClockwise }}"></progress-arc>
-          <div class="control">
-            <div class="range range-assertive">
-              <input type="range" name="volume" min="0" max="1" step="0.01" ng-model="pos.y" id="pos.y">
+          <div ng-show="!isPanTiltJoystick">
+            <progress-arc
+                size="{{ size }}"
+                stroke="{{ stroke }}"
+                stroke-width="{{ strokeWidth }}"
+                complete="pos.x"
+                background="{{ background }}"
+                counter-clockwise="{{ counterClockwise }}"></progress-arc>
+            <div class="control">
+                <div class="range range-assertive">
+                  <input type="range" min="0" max="1" step="0.01" ng-model="pos.x" id="pos.x">
+                </div>
+                <!-- <span class="info">{{ pos.x * 360 | number: 2 }}°</span> -->
             </div>
-            <!-- <span class="info">{{ pos.y * 360 | number: 1 }}°</span> -->
+          </div>
+        </div>
+        <div class="col">
+          <div ng-show="!isPanTiltJoystick">
+            <progress-arc
+                size="{{ size }}"
+                stroke="{{ stroke }}"
+                stroke-width="{{ strokeWidth }}"
+                complete="pos.y"
+                background="{{ background }}"
+                counter-clockwise="{{ counterClockwise }}"></progress-arc>
+            <div class="control">
+              <div class="range range-assertive">
+                <input type="range" name="volume" min="0" max="1" step="0.01" ng-model="pos.y" id="pos.y">
+              </div>
+              <!-- <span class="info">{{ pos.y * 360 | number: 1 }}°</span> -->
+            </div>
           </div>
         </div>
       </div>
     </div>
-
 
 
 

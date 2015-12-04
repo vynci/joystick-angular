@@ -1,16 +1,31 @@
 <ion-view view-title="Move Manager">
   <ion-content>
-    <div class="item item-divider info center-item">
-        <span class="assertive">Time Line - </span>{{totalTimeHeader}}
+    <div ng-show="keyFrames.keyFrames.length" class="item item-divider time-line info">
+      <div class="row">
+        <div class="col col-25">
+
+        </div>
+        <div class="col col-50 center-item">
+          <span class="assertive">Time Line </span>{{totalTimeHeader}}
+        </div>
+        <div class="col col-25">
+          <i ng-show="isMovingIndicator" class="icon ion-ios-circle-filled balanced"></i>
+        </div>
+      </div>
+    </div>
+
+    <div ng-hide="keyFrames.keyFrames.length" class="item item-divider time-line center-item info">
+      No moves in manager, press "+" to add some.
     </div>
 
     <ion-list>
       <!-- <button ng-style="{ 'width' : (((item.delay + item.duration)/totalTime)*10) + '%' }" class="button button-small button-outline button-balanced" ng-repeat="item in keyFrames.keyFrames" ng-click="openModal(item)">
         {{item.name}} : {{item.delay}} : {{item.duration}}
       </button> -->
-      <button class="button button-small button-block button-outline button-balanced" ng-repeat="item in keyFrames.keyFrames" ng-click="openModal(item)">
-        {{item.name}} : {{item.delay}} : {{item.duration}}
+      <button class="button button-block button-outline button-balanced" ng-repeat="item in keyFrames.keyFrames" ng-click="openModal(item)">
+        {{item.name}} - 00 : {{item.offset}} - Pan {{item.pan}} - Tilt {{item.tilt}} - Slider {{item.slider}}
       </button>
+
     </ion-list>
 
     <br>
@@ -19,25 +34,38 @@
     <div class="item item-divider center-item">
       <span class="info">{{bluetoothRx}}</span>
     </div>
-
     <div class="row">
+      <div class="col">
+        <button ng-hide="isLoop" class="button button-block button-assertive" ng-click="enableLoop()">
+          <i class="icon ion-ios-loop-strong"></i>
+        </button>
+        <button ng-show="isLoop" class="button button-block button-balanced" ng-click="disableLoop()">
+          <i class="icon ion-ios-loop-strong"></i>
+        </button>
+      </div>
+
+
+      <div class="col">
+        <button ng-disabled="!keyFrames.keyFrames.length" class="button button-block button-assertive" ng-click="sendStop()">
+          <i class="icon ion-stop"></i>
+        </button>
+      </div>
+
+      <div class="col">
+        <button ng-disabled="!keyFrames.keyFrames.length" ng-hide="isPause" class="button button-block button-assertive" ng-click="executeStack()">
+          <i class="icon ion-play"></i>
+        </button>
+        <button ng-disabled="!keyFrames.keyFrames.length" ng-show="isPause" class="button button-block button-assertive" ng-click="sendPause()">
+          <i class="icon ion-ios-pause"></i>
+        </button>
+      </div>
       <div class="col">
         <button class="button button-block button-assertive" ng-click="openModal()">
           <i class="icon ion-plus"></i>
         </button>
       </div>
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="openModal()">
-          <i class="icon ion-stop"></i>
-        </button>
-      </div>
-      <div class="col">
-        <button class="button button-block button-assertive" ng-click="executeStack()">
-          <i class="icon ion-play"></i>
-        </button>
-      </div>
-      <div class="col">
-        <button class="button button-block button-assertive" ng-click="newStack()">
+        <button ng-disabled="!keyFrames.keyFrames.length" class="button button-block button-assertive" ng-click="newStack()">
           New
         </button>
       </div>
@@ -46,13 +74,13 @@
 
 
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="showPopup()">
+        <button ng-disabled="!keyFrames.keyFrames.length" class="button button-block button-assertive" ng-click="showPopup()">
           Save
         </button>
       </div>
 
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="saveAsStack()">
+        <button ng-disabled="!keyFrames.keyFrames.length" class="button button-block button-assertive" ng-click="saveAsStack()">
           Save As
         </button>
       </div>

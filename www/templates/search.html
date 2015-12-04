@@ -4,7 +4,7 @@
     <div class="title-bar">
       <h4 class="info"> Status: {{blStatus}}</h4>
     </div>
-    <div class="list">
+    <!-- <div class="list">
 
       <a class="item" href="#">
         <span class="info">Pan/Tilt</span>
@@ -21,9 +21,12 @@
       </a>
 
 
-    </div>
-    <div class="title-bar">
+    </div> -->
+    <div ng-show="btDevices.length" class="title-bar">
       <h4 class="info">Choose Device</h4>
+    </div>
+    <div ng-hide="btDevices.length" class="title-bar">
+      <h4 class="info">Press "Discover" Button to List Available Devices</h4>
     </div>
     <div class="list">
       <ion-item ng-repeat="device in btDevices"
@@ -31,7 +34,7 @@
           <b><i class="icon ion-bluetooth"></i></b>
           {{device.name}}
           <button class="button button-assertive" ng-click="connectBT(device.id)">
-            <i class="icon ion-link"></i>
+            Connect
           </button>
       </ion-item>
     </div>

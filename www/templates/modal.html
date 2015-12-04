@@ -1,14 +1,14 @@
-<div class="modal">
-  <ion-header-bar class="bar-dark">
+<div class="modal modal-background">
+  <ion-header-bar ng-show="isPhone" class="bar-dark">
   <h1 class="title">Settings</h1>
   </ion-header-bar>
-  <ion-content class="background">
+  <ion-content ng-class="{'modal-settings': !isPhone}" class="background">
     <div class="list info">
       <div class="item item-divider info center-item">
         Set Speed
       </div>
       <div class="range range-assertive">
-        Fast
+        <span class="tablet-size-indicator">{{settings.speed}}</span>
         <input type="range" name="volume" min="1" max="100" ng-model="settings.speed">
       </div>
 
@@ -71,7 +71,7 @@
       </div>
 
       <li class="item item-toggle info">
-         Slave
+        <span class="tablet-size-indicator">Slave</span>
          <label class="toggle toggle-assertive">
            <input type="checkbox" ng-model="settings.slaveMode">
            <div class="track">
@@ -81,11 +81,45 @@
       </li>
 
       <div class="item item-divider info center-item">
+        Configuration
+      </div>
+
+      <label class="item item-input item-select">
+        <div class="input-label info">
+          Option
+        </div>
+        <select ng-model="settings.masterBoss">
+          <option value="pan-tilt">Pan/Tilt</option>
+          <option value="slider">Slider</option>
+          <option value="both">Both</option>
+        </select>
+      </label>
+
+      <div ng-show="settings.masterBoss == 'pan-tilt'" class="item item-divider balanced">
+        Connect bluetooth to Pan/Tilt
+      </div>
+      <div ng-show="settings.masterBoss == 'slider'" class="item item-divider balanced">
+        Connect bluetooth to Slider
+      </div>
+      <div ng-show="settings.masterBoss == 'both'" class="item item-divider balanced">
+        Connect bluetooth to Pan/Tilt
+      </div>
+
+
+      <div class="item item-divider info center-item">
         Acceleration Offset
       </div>
       <div class="range range-assertive">
-        {{ settings.accelerationOffset | number: 1 }}
+        <span class="tablet-size-indicator">{{ settings.accelerationOffset | number: 1 }}</span>
         <input type="range" min="100" max="400" step="1" ng-model="settings.accelerationOffset" id="saccelerationOffset">
+      </div>
+
+      <div class="item item-divider info center-item">
+        Distance
+      </div>
+      <div class="range range-assertive">
+        <span class="tablet-size-indicator">{{ settings.distance }}</span>
+        <input type="range" name="volume" min="1" max="20" ng-model="settings.distance">
       </div>
 
     </div>

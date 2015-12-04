@@ -1,29 +1,39 @@
 <ion-view view-title="Cloud Storage">
   <ion-content>
-    <div class="row">
-      <div class="col">
+    <div ng-show="isLogged" class="item item-divider info center-item">
+      Welcome {{currentUsername}}
+    </div>
+
+    <div ng-hide="isLogged" class="item item-divider info center-item">
+      Hi, You are currently not logged-in.
+    </div>
+    <div class="row" ng-show="isLogged">
+      <!-- <div class="col">
         <button class="button button-block button-stable" ng-click="refreshCloud(item)">
           {{currentUsername}}
         </button>
-      </div>
+      </div> -->
       <div class="col">
         <button class="button button-block button-calm" ng-click="refreshCloud(item)">
           <i class="icon ion-refresh"></i>
         </button>
       </div>
       <div class="col">
-        <button ng-show="isLogged" class="button button-block button-assertive" ng-click="logout()">
+        <button class="button button-block button-assertive" ng-click="logout()">
           Logout
         </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
         <button ng-hide="isLogged" class="button button-block button-assertive" ng-click="logout()">
           Login
         </button>
       </div>
-
     </div>
 
 
-    <ion-list>
+    <ion-list ng-show="isLogged">
       <div class="item item-divider info center-item">
         Cloud
 

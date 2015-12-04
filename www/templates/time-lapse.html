@@ -1,7 +1,7 @@
 <ion-view view-title="Time Lapse">
   <ion-content>
     <div class="item item-divider info center-item">
-        <span class="assertive">Time Line - </span>00:03:29
+        Limits
     </div>
 
     <div class="list info">
@@ -9,52 +9,52 @@
         <div class="col">
           <label class="item item-input">
             <span class="input-label info">Pan Start</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="panStart">
           </label>
           <label class="item item-input">
             <span class="input-label info">Tilt Start</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="tiltStart">
           </label>
           <label class="item item-input">
             <span class="input-label info">Slide Start</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="sliderStart">
           </label>
         </div>
         <div class="col">
           <label class="item item-input">
             <span class="input-label info" class="info">Pan End</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="panEnd">
           </label>
           <label class="item item-input">
             <span class="input-label info">Tilt End</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="tiltEnd">
           </label>
           <label class="item item-input">
             <span class="input-label info">Slide End</span>
-            <input type="text" class="info">
+            <input type="text" class="info" ng-model="sliderEnd">
           </label>
         </div>
       </div>
 
       <div class="item item-divider info center-item">
-        Set Home
+        Options
       </div>
 
       <label class="item item-input">
         <span class="input-label info" class="info">Shots</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="shotsReq">
       </label>
       <label class="item item-input">
         <span class="input-label info">Shutter Delay</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="shutterDelay">
       </label>
       <label class="item item-input">
         <span class="input-label info">Stabilize</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="stabilizeDelay">
       </label>
       <label class="item item-input">
         <span class="input-label info">Duration</span>
-        <input type="text" class="info">
+        <input type="text" class="info" ng-model="duration">
       </label>
 
     </div>
@@ -77,7 +77,7 @@
       </div>
 
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="openModal()">
+        <button class="button button-block button-assertive" ng-click="execute()">
           <i class="icon ion-play"></i>
         </button>
       </div>

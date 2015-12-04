@@ -18,11 +18,11 @@ angular.module('starter.joystick', []).directive('joystick', function() {
         scope : {
             // Using primitives here did not work, so we use an Object, see: http://stackoverflow.com/questions/14049480/what-are-the-nuances-of-scope-prototypal-prototypical-inheritance-in-angularjs
             position : '=',
-            offset : '='
+            offset : '=',
+            devType : '='
         },
         template : '<canvas class="joystickCanvas"></canvas>',
         link : function(scope, element) {
-
             var joystickHeight = 200;
             var joystickWidth  = 200;
 
@@ -52,11 +52,12 @@ angular.module('starter.joystick', []).directive('joystick', function() {
             }
 
             function onTouchStart(event) {
+              console.log(scope.offset);
                 var touch = event.targetTouches[0];
                 cursorTouchId = touch.identifier;
                 cursorTouch = {
                     x : touch.pageX - touch.target.offsetLeft,
-                    y : touch.pageY - scope.offset
+                    y : touch.pageY - (touch.target.offsetTop + 40)
                 };
             }
 
@@ -70,7 +71,7 @@ angular.module('starter.joystick', []).directive('joystick', function() {
                     {
                         cursorTouch = {
                             x : touch.pageX - touch.target.offsetLeft,
-                            y : touch.pageY - scope.offset
+                            y : touch.pageY - (touch.target.offsetTop + 40)
                         };
 
                         var scaleX = radiusBound / (cursorTouch.x - center.x);
