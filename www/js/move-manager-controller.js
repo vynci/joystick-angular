@@ -276,7 +276,7 @@ angular.module('starter.move-manager', [])
 
   $scope.sendStop = function(){
     $scope.isPause = false;
-    $scope.mainMsg(0, 'D');
+    $scope.mainMsg(0, 'D]');
   }
 
   $scope.enableLoop = function(){

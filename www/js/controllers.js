@@ -12,15 +12,19 @@ angular.module('starter.controllers', [])
   $scope.strokeWidth = 10;
   $scope.stroke = '#ef473a';
   $scope.background = '#444444';
-  $scope.counterClockwise = '';
 
   $scope.tiltProgress = 0.50;
-  $scope.counterClockwise = '';
+
   $scope.isLoop = false;
-  //$scope.isPantilt = false;
+  $scope.isPantilt = false;
+  $scope.isSlider = false;
+
+  $rootScope.isDeviceSlider = true;
   function activate(){
     if($window.innerHeight < 1279 && $window.innerWidth < 799 ){
       $scope.isPhone = true;
+    } else {
+      $scope.isPhone = false;
     }
   }
 
@@ -55,8 +59,11 @@ angular.module('starter.controllers', [])
       y : 0.5
   };
 
-  $scope.currentPan = '';
-  $scope.currentTilt = '';
+  $scope.currentPan = 1;
+  $scope.currentTilt = 1;
+  $scope.currentSlider = 1;
+
+  var currentPanValue = 1;
 
   $scope.slider = 0;
 
@@ -76,36 +83,33 @@ angular.module('starter.controllers', [])
 
   $scope.duration = 5;
 
-  $scope.$watch(function ( $scope ) {
-    if($scope.position !== undefined){
-      return $scope.position.x;
-    }
-  }, _.debounce(function(newVal, oldVal){
-    if(newVal !== oldVal){
-      if($scope.offset === 12){
-        if($scope.position.x === 100){
+  $scope.done = function (value) {
+    $scope.doneValue = value;
+    console.log(value.direction);
+    console.log($scope.prevValue)
+
+    if($scope.prevValue !== value.direction){
+      $scope.prevValue = value.direction;
+      if(value.offset === 12){
+        if(value.direction === 'right'){
           $scope.goToXYZ(0,$scope.duration,0,$scope.currentPan,$scope.currentTilt,495);
-        } else if($scope.position.x === -100) {
+        } else if(value.direction === 'left') {
           $scope.goToXYZ(0,$scope.duration,0,$scope.currentPan,$scope.currentTilt,-495);
         }
       } else {
-        if($scope.position.y === 100){
-          $scope.goToXYZ(0,$scope.duration,0,$scope.currentPan,179,125);
-        } else if($scope.position.y === -100) {
-          $scope.goToXYZ(0,$scope.duration,0,$scope.currentPan,-179,125);
-        } else if($scope.position.x === 100){
-          $scope.goToXYZ(0,$scope.duration,0,179,$scope.currentTilt,125);
-        } else if($scope.position.x === -100) {
-          $scope.goToXYZ(0,$scope.duration,0,-179,$scope.currentTilt,125);
+        if(value.direction === 'up'){
+          $scope.goToXYZ(0,$scope.duration,0,$scope.currentPan,179,$scope.currentSlider);
+        } else if(value.direction === 'down') {
+          $scope.goToXYZ(0,$scope.duration,0,$scope.currentPan,-179,$scope.currentSlider);
+        } else if(value.direction === 'right'){
+          $scope.goToXYZ(0,$scope.duration,0,179,$scope.currentTilt,$scope.currentSlider);
+        } else if(value.direction === 'left') {
+          $scope.goToXYZ(0,$scope.duration,0,-179,$scope.currentTilt,$scope.currentSlider);
         }
-      }
-      if($scope.position.x === 0){
-        console.log('position back to 0');
-        $scope.writeBluetooth(1, 'D]');
       }
     }
 
-  },100));
+  };
 
   $scope.incDuration = function(){
     $scope.duration += 1;
@@ -153,7 +157,13 @@ angular.module('starter.controllers', [])
     if(tilt > 180){
       tilt -= 360;
     }
-    console.log($scope.sliderPosition.slider);
+
+    $scope.currentPan = pan;
+    $scope.currentTilt = tilt;
+    $scope.currentSlider = $scope.sliderPosition.slider;
+
+    console.log($scope.currentPan);
+
     $scope.goToXYZ(0,$scope.duration,0,pan,tilt,$scope.sliderPosition.slider);
   }
 
@@ -225,6 +235,17 @@ angular.module('starter.controllers', [])
     $scope.writeBluetooth(1, 'D]');
     $scope.isPantilt = false;
   }
+
+  $scope.sliderOnStart = function(id){
+    $scope.isSlider = true;
+  }
+
+  $scope.sliderOnEnd = function(){
+    console.log('release');
+    console.log('position back to 0');
+    $scope.writeBluetooth(1, 'D]');
+    $scope.isSlider = false;
+  }
 ///////////////////// Modal Settings ////////////
 
   $ionicModal.fromTemplateUrl('templates/modal.html', {
@@ -257,12 +278,20 @@ $scope.goToXYZ = function (offset, duration, delay, pan, tilt, slider) {
     loop = '0';
   }
   console.log('G:[' + offset + ',' + duration + ',' + delay + ',' + pan + ',' + tilt + ',' + slider + ',' + loop + ']');
-  $cordovaBluetoothSerial.write('G:[' + offset + ',' + duration + ',' + delay + ',' + pan + ',' + tilt + ',' + slider + ',' + loop + ']').then(
+  $cordovaBluetoothSerial.isConnected().then(
     function() {
-      $scope.blMsgStatus = 'Enabled';
+      $cordovaBluetoothSerial.write('G:[' + offset + ',' + duration + ',' + delay + ',' + pan + ',' + tilt + ',' + slider + ',' + loop + ']').then(
+        function() {
+          $scope.blMsgStatus = 'Enabled';
+        },
+        function() {
+          alert('Error: Please Reconnect Bluetooth');
+        }
+      );
     },
     function() {
-      $scope.blMsgStatus = 'Disabled';
+      alert('Error: Please Reconnect Bluetooth');
+      $state.go('app.search');
     }
   );
 };
@@ -307,6 +336,7 @@ $scope.sendSettings = function () {
 };
 
 $scope.goHome = function(time, data){
+  console.log('home!');
   $cordovaBluetoothSerial.write('C:H]').then(
     function() {
       $scope.blMsgStatus = data;
@@ -370,9 +400,9 @@ $scope.writeBluetooth = function(time, data){
 $scope.readBufferBT = function(){
   $cordovaBluetoothSerial.read().then(
     function(data) {
-      console.log('read: ', data);
+      // console.log('read: ', data);
       if(data !== ''){
-        console.log('Received: ' + data);
+        // console.log('Received: ' + data);
       }
 
       if(data === 'E:0'){
@@ -389,6 +419,8 @@ $scope.readBufferBT = function(){
       if(pan !== undefined && tilt !== undefined){
         $scope.currentPan = pan;
         $scope.currentTilt = tilt;
+        $scope.currentSlider = slider;
+
         $scope.bluetoothRx = 'Pan: ' + pan + ' - ' + 'Tilt: ' + tilt + ' - ' + 'Slider: ' + slider;
       }
 
@@ -427,8 +459,7 @@ $scope.$on('$ionicView.beforeLeave', function (event) {
 });
 
 $scope.$on('$ionicView.enter', function (event) {
-  console.log('enter the dragon!');
-  console.log()
+
   bluetoothReadInterval = $interval(function(){
     $scope.readBufferBT();
   }, 75);
@@ -601,10 +632,11 @@ $scope.$on('$ionicView.enter', function (event) {
     );
   };
 
-  $scope.connectBT = function(id) {
+  $scope.connectBT = function(id, name) {
     $cordovaBluetoothSerial.connect(id).then(
       function() {
         $rootScope.bluetoothId = id;
+        $rootScope.isDeviceSlider = _.startsWith(name, 'PROLINESL');
         $scope.blStatus = 'Successfully Connected';
         $ionicHistory.nextViewOptions({
           disableBack: true

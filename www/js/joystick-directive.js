@@ -7,22 +7,29 @@ window.requestAnimFrame = (function(){
         };
 })();
 
-angular.module('starter.joystick', []).directive('joystick', function() {
+angular.module('starter.joystick', []).directive('joystick', function($timeout) {
 
     function joystickController ($scope) {
+      $scope.joystickValue = 1;
     }
 
     return {
         restrict : 'E',
-        controller : 'PlaylistsCtrl',
+        controller : joystickController,
         scope : {
-            // Using primitives here did not work, so we use an Object, see: http://stackoverflow.com/questions/14049480/what-are-the-nuances-of-scope-prototypal-prototypical-inheritance-in-angularjs
-            position : '=',
+            position : '&',
             offset : '=',
-            devType : '='
+            onDone: "&"
         },
         template : '<canvas class="joystickCanvas"></canvas>',
         link : function(scope, element) {
+
+            // $timeout(function () {
+            //   scope.onDone({
+            //     value: "something"
+            //   });
+            // }, 3000);
+
             var joystickHeight = 200;
             var joystickWidth  = 200;
 
@@ -52,7 +59,6 @@ angular.module('starter.joystick', []).directive('joystick', function() {
             }
 
             function onTouchStart(event) {
-              console.log(scope.offset);
                 var touch = event.targetTouches[0];
                 cursorTouchId = touch.identifier;
                 cursorTouch = {
@@ -153,12 +159,47 @@ angular.module('starter.joystick', []).directive('joystick', function() {
             }
 
             // Bind to the values from outside as well
-            // scope.$watch('position', function(newval) {
-            //     cursorTouch = {
-            //         x : ((newval.x * radiusBound) / 100) + center.x,
-            //         y : ((newval.y * radiusBound) / -100) + center.y
-            //     };
-            // });
+            scope.$watch('position', function(newVal, oldVal) {
+              if(newVal !== oldVal){
+                if(newVal.x === 100){
+                  scope.onDone({
+                    value: {
+                      direction : 'right',
+                      offset : scope.offset
+                    }
+                  });
+                } else if(newVal.x === -100) {
+                  scope.onDone({
+                    value: {
+                      direction : 'left',
+                      offset : scope.offset
+                    }
+                  });
+                } else if(newVal.y === 100) {
+                  scope.onDone({
+                    value: {
+                      direction : 'up',
+                      offset : scope.offset
+                    }
+                  });
+                } else if(newVal.y === -100) {
+                  scope.onDone({
+                    value: {
+                      direction : 'down',
+                      offset : scope.offset
+                    }
+                  });
+                } else if(newVal.x === 0 || newVal.y === 0) {
+                  scope.onDone({
+                    value: {
+                      direction : 'center',
+                      offset : scope.offset
+                    }
+                  });
+                }
+
+              }
+            });
 
             resetCanvas();
             draw();
