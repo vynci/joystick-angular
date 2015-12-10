@@ -19,7 +19,8 @@ angular.module('starter.controllers', [])
   $scope.isPantilt = false;
   $scope.isSlider = false;
 
-  $rootScope.isDeviceSlider = true;
+  // $rootScope.isDeviceSlider = true;
+  // $scope.isBluetoothConnected = true;
   function activate(){
     if($window.innerHeight < 1279 && $window.innerWidth < 799 ){
       $scope.isPhone = true;
@@ -402,27 +403,43 @@ $scope.readBufferBT = function(){
     function(data) {
       // console.log('read: ', data);
       if(data !== ''){
-        // console.log('Received: ' + data);
+        console.log('Received: ' + data);
       }
 
       if(data === 'E:0'){
         alert('Request Re-Transmission!');
       }
 
-      var tmp = data.split(',');
-      var pan = tmp[0].split('P');
+      if($rootScope.isDeviceSlider){
+        var tmp1 = data.split(',');
+        var slider1 = tmp1[0].split('S');
 
-      pan = pan[2];
-      var tilt = tmp[1];
-      var slider = tmp[2];
+        slider1 = slider1[2];
 
-      if(pan !== undefined && tilt !== undefined){
-        $scope.currentPan = pan;
-        $scope.currentTilt = tilt;
-        $scope.currentSlider = slider;
+        if(slider1 !== undefined){
 
-        $scope.bluetoothRx = 'Pan: ' + pan + ' - ' + 'Tilt: ' + tilt + ' - ' + 'Slider: ' + slider;
+          $scope.currentSlider = slider1;
+
+          $scope.bluetoothRx = 'Slider: ' + slider1;
+        }
+      } else {
+        var tmp = data.split(',');
+        var pan = tmp[0].split('P');
+
+        pan = pan[2];
+        var tilt = tmp[1];
+        var slider = tmp[2];
+
+        if(pan !== undefined && tilt !== undefined){
+          $scope.currentPan = pan;
+          $scope.currentTilt = tilt;
+          $scope.currentSlider = slider;
+
+          $scope.bluetoothRx = 'Pan: ' + pan + ' - ' + 'Tilt: ' + tilt + ' - ' + 'Slider: ' + slider;
+        }
       }
+
+
 
     },
     function(err) {
@@ -551,7 +568,22 @@ $scope.$on('$ionicView.enter', function (event) {
     console.log(msg);
 
     $scope.mainMsg(1, msg);
+  }
 
+  $scope.resetValues = function(){
+    $scope.panStart = -90;
+    $scope.panEnd = 90;
+
+    $scope.tiltStart = 0;
+    $scope.tiltEnd = 0;
+
+    $scope.sliderStart = -490;
+    $scope.sliderEnd = 490;
+
+    $scope.duration = 60;
+    $scope.shotsReq= 5;
+    $scope.shutterDelay = 500;
+    $scope.stabilizeDelay = 500;
   }
 
   $scope.mainMsg = function(time, data){
@@ -605,12 +637,14 @@ $scope.$on('$ionicView.enter', function (event) {
       $cordovaBluetoothSerial.isEnabled().then(
         function() {
           $scope.blStatus = 'Enabled';
+          $scope.listBT();
         },
         function() {
           $scope.blStatus = 'Disabled';
           $cordovaBluetoothSerial.enable().then(
             function() {
               $scope.blStatus = 'Enabled';
+              $scope.listBT();
             },
             function() {
               $scope.blStatus = 'Disabled';

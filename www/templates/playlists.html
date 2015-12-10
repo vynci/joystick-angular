@@ -3,7 +3,7 @@
     <div class="header-section">
       <div class="row button-header">
         <div class="col col-25">
-          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="goHome()">
+          <button ng-disabled="!isBluetoothConnected" ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="goHome()">
             <span class="info">Home</span>
           </button>
         </div>
@@ -15,12 +15,12 @@
         </div>
 
         <div class="col col-25">
-          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="openModal()">
+          <button ng-disabled="!isBluetoothConnected" ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="openModal()">
             <i class="icon ion-gear-a info"></i>
           </button>
         </div>
         <div class="col col-25">
-          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="addKeyFrame()">
+          <button ng-disabled="!isBluetoothConnected" ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="addKeyFrame()">
             <i class="icon ion-film-marker info"> </i>
             <span ng-hide="isPhone" class="info"> KeyFrame+</span>
           </button>
@@ -30,36 +30,42 @@
       <div class="row button-header">
 
         <div class="col">
-          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="showSliderJoystick()">
+          <button ng-disabled="!isBluetoothConnected" ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="showSliderJoystick()">
             <span class="info">Slider</span>
           </button>
         </div>
 
         <div class="col">
-          <button ng-disabled="isDeviceSlider" ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="showPanTiltJoystick()">
+          <button ng-disabled="isDeviceSlider || !isBluetoothConnected" ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="showPanTiltJoystick()">
             <span class="info">Pan/Tilt</span>
           </button>
         </div>
 
         <div class="col">
-          <button ng-hide="isLoop" ng-class="{'button-small': isPhone}" class="button button-block button-assertive" ng-click="enableLoop()">
+          <button ng-disabled="!isBluetoothConnected" ng-hide="isLoop" ng-class="{'button-small': isPhone}" class="button button-block button-assertive" ng-click="enableLoop()">
             <i class="icon ion-ios-loop-strong"> Loop Off</i>
           </button>
-          <button ng-show="isLoop" ng-class="{'button-small': isPhone}" class="button button-block button-balanced" ng-click="disableLoop()">
+          <button ng-disabled="!isBluetoothConnected" ng-show="isLoop" ng-class="{'button-small': isPhone}" class="button button-block button-balanced" ng-click="disableLoop()">
             <i class="icon ion-ios-loop-strong"> Loop On</i>
           </button>
 
         </div>
 
         <div class="col">
-          <button ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="updateAllPosition()">
+          <button ng-disabled="!isBluetoothConnected" ng-class="{'button-small': isPhone}" class="button button-outline button-block button-assertive" ng-click="updateAllPosition()">
             <span class="info">Update</span>
           </button>
         </div>
       </div>
     </div>
 
-    <div ng-class="{'slider-tablet': !isPhone}">
+    <div ng-show="!isBluetoothConnected" ng-class="{'pan-tilt-tablet': !isPhone}">
+      <div ng-class="{'font-indicator': !isPhone}">
+        <span class="info">No Slider Device Connected</span>
+      </div>
+    </div>
+
+    <div ng-show="isBluetoothConnected" ng-class="{'slider-tablet': !isPhone}">
       <div ng-class="{'font-indicator': !isPhone}">
         <span class="info">Current Position: <span>{{bluetoothRx}}</span></span>
         <br ng-hide="isPhone">
@@ -111,12 +117,12 @@
 
       </div>
     </div>
-    <div ng-show="isDeviceSlider" ng-class="{'pan-tilt-tablet': !isPhone}">
+    <div ng-show="isDeviceSlider || !isBluetoothConnected" ng-class="{'pan-tilt-tablet': !isPhone}">
       <div ng-class="{'font-indicator': !isPhone}">
         <span class="info">No Pan/Tilt Device Connected</span>
       </div>
     </div>
-    <div ng-hide="isDeviceSlider" ng-class="{'pan-tilt-tablet': !isPhone}">
+    <div ng-hide="isDeviceSlider || !isBluetoothConnected" ng-class="{'pan-tilt-tablet': !isPhone}">
       <div ng-class="{'font-indicator': !isPhone}">
 
         <span class="info">Pan: {{pos.x >= 0.5 ? ((pos.x * 360)-360) : (pos.x * 360) | number: 1}}°</span>

@@ -37,7 +37,11 @@
 }
 
 .time-line{
-  height: 65px;
+  height: 75px !important;
+}
+
+.time-line-indicator{
+  position: absolute;
 }
 .black-bg{
   background-color: #1A1A1A !important;

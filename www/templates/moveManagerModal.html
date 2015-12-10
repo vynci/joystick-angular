@@ -26,11 +26,11 @@
 
       <label class="item item-input">
         <span class="input-label info" class="info">Duration</span>
-        <input type="text" class="info" ng-model="move.duration">
+        <input type="number" min="0" class="info" ng-model="move.duration">
       </label>
       <label class="item item-input">
         <span class="input-label info">Delay</span>
-        <input type="text" class="info" ng-model="move.delay">
+        <input type="number" min="0" class="info" ng-model="move.delay">
       </label>
 
 
@@ -38,17 +38,17 @@
         Set Position
       </div>
 
-      <label class="item item-input">
+      <label ng-hide="isDeviceSlider" class="item item-input">
         <span class="input-label info" class="info">Pan</span>
-        <input type="text" class="info" ng-model="move.pan">
+        <input type="number" min="0" class="info" ng-model="move.pan">
       </label>
-      <label class="item item-input">
+      <label ng-hide="isDeviceSlider" class="item item-input">
         <span class="input-label info">Tilt</span>
-        <input type="text" class="info" ng-model="move.tilt">
+        <input type="number" min="0" class="info" ng-model="move.tilt">
       </label>
       <label class="item item-input">
         <span class="input-label info">Slider</span>
-        <input type="text" class="info" ng-model="move.slider">
+        <input type="number" min="0" class="info" ng-model="move.slider">
       </label>
 
 
@@ -56,7 +56,15 @@
 
     <div class="row">
       <div class="col">
-        <button class="button button-block button-royal" ng-click="testMove(move)">Test Current Move</button>
+        <button ng-disabled="!isBluetoothConnected" class="button button-block button-royal" ng-click="testMove(move)">Test Current Move</button>
+      </div>
+
+
+    </div>
+
+    <div ng-hide="isBluetoothConnected"class="row">
+      <div class="col">
+        <span class="info">No Bluetooth Device connected</span>
       </div>
     </div>
 

@@ -9,7 +9,8 @@
           <span class="assertive">Time Line </span>{{totalTimeHeader}}
         </div>
         <div class="col col-25">
-          <i ng-show="isMovingIndicator" class="icon ion-ios-circle-filled balanced"></i>
+          <div class="time-line-indicator"><i ng-show="isMovingIndicator" class="icon ion-ios-circle-filled balanced"></i></div>
+
         </div>
       </div>
     </div>
@@ -32,7 +33,8 @@
 
     <br>
     <div class="item item-divider center-item">
-      <span class="info">{{bluetoothRx}}</span>
+      <span ng-show="isBluetoothConnected" class="info">{{bluetoothRx}}</span>
+      <span ng-show="!isBluetoothConnected" class="info">No Bluetooth Device Connected</span>
     </div>
     <div class="row">
       <div class="col">
@@ -46,13 +48,13 @@
 
 
       <div class="col">
-        <button ng-disabled="!keyFrames.keyFrames.length" class="button button-block button-assertive" ng-click="sendStop()">
+        <button ng-disabled="!keyFrames.keyFrames.length || !isBluetoothConnected" class="button button-block button-assertive" ng-click="sendStop()">
           <i class="icon ion-stop"></i>
         </button>
       </div>
 
       <div class="col">
-        <button ng-disabled="!keyFrames.keyFrames.length" ng-hide="isPause" class="button button-block button-assertive" ng-click="executeStack()">
+        <button ng-disabled="!keyFrames.keyFrames.length || !isBluetoothConnected" ng-hide="isPause" class="button button-block button-assertive" ng-click="executeStack()">
           <i class="icon ion-play"></i>
         </button>
         <button ng-disabled="!keyFrames.keyFrames.length" ng-show="isPause" class="button button-block button-assertive" ng-click="sendPause()">

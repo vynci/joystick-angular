@@ -10,6 +10,8 @@ angular.module('starter.move-manager', [])
   $scope.totalTimeHeader = '';
   $scope.isPause = false;
   $scope.isLoop = false;
+  // $rootScope.isBluetoothConnected = true;
+  // $rootScope.isDeviceSlider = false;
   function activate(){
     console.log('activate');
 
@@ -318,9 +320,11 @@ angular.module('starter.move-manager', [])
       $cordovaBluetoothSerial.isConnected().then(
         function() {
           $scope.blMsgStatus = 'Enabled';
+          $scope.isBluetoothConnected = true;
         },
         function() {
           $scope.blMsgStatus = 'Disabled';
+          $scope.isBluetoothConnected = false;
           $scope.connectBT($rootScope.bluetoothId);
         }
       );
@@ -331,10 +335,12 @@ angular.module('starter.move-manager', [])
       function() {
         $rootScope.bluetoothId = id;
         $scope.blMsgStatus = 'Successfully Connected';
+        $scope.isBluetoothConnected = true;
         $scope.subscribeBT();
       },
       function() {
         $scope.blMsgStatus = 'Error on Connection';
+        $scope.isBluetoothConnected = false;
       }
     );
   };
@@ -350,28 +356,51 @@ angular.module('starter.move-manager', [])
           alert('Request Re-Transmission!');
         }
 
-        var tmp = data.split(',');
+        if($rootScope.isDeviceSlider){
+          var tmp1 = data.split(',');
 
-        var pan = tmp[0].split('P');
-        pan = pan[2];
-        var tilt = tmp[1];
+          var slider1 = tmp1[0].split('S');
+          slider1 = slider1[2];
 
-        var slider = tmp[2];
-        var isMoving = tmp[3];
+          var isMoving1 = tmp1[1];
+          if(isMoving1 === '6'){
+            $scope.isMovingIndicator = true;
+          } else if(isMoving === '0'){
+            $scope.isPause = false;
+          }else {
+            $scope.isMovingIndicator = false;
+          }
 
-        if(isMoving === '6'){
-          $scope.isMovingIndicator = true;
-        } else if(isMoving === '0'){
-          $scope.isPause = false;
-        }else {
-          $scope.isMovingIndicator = false;
+          if(slider1){
+            $scope.bluetoothRx = 'Slider: ' + slider1;
+          }
+        } else {
+          var tmp = data.split(',');
+
+          var pan = tmp[0].split('P');
+          pan = pan[2];
+          var tilt = tmp[1];
+
+          var slider = tmp[2];
+          var isMoving = tmp[3];
+
+          if(isMoving === '6'){
+            $scope.isMovingIndicator = true;
+          } else if(isMoving === '0'){
+            $scope.isPause = false;
+          }else {
+            $scope.isMovingIndicator = false;
+          }
+
+          if(pan !== undefined && tilt !== undefined){
+            $scope.currentPan = pan;
+            $scope.currentTilt = tilt;
+            $scope.bluetoothRx = 'Pan: ' + pan + ' - ' + 'Tilt: ' + tilt + ' - ' + 'Slider: ' + slider;
+          }
         }
 
-        if(pan !== undefined && tilt !== undefined){
-          $scope.currentPan = pan;
-          $scope.currentTilt = tilt;
-          $scope.bluetoothRx = 'Pan: ' + pan + ' - ' + 'Tilt: ' + tilt + ' - ' + 'Slider: ' + slider;
-        }
+
+
 
       },
       function(err) {
