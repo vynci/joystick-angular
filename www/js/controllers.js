@@ -658,6 +658,7 @@ $scope.$on('$ionicView.enter', function (event) {
 
 .controller('BluetoothSearch', function($state, $ionicHistory, $scope, $cordovaBluetoothSerial, $timeout, $rootScope) {
   $scope.blStatus = 'Bluetooth Disabled';
+  $scope.isConnecting = false;
   $scope.checkBT = function (time) {
     $timeout(function () {
       $cordovaBluetoothSerial.isEnabled().then(
@@ -703,6 +704,7 @@ $scope.$on('$ionicView.enter', function (event) {
 
   $scope.connectBT = function(id, name) {
     $cordovaBluetoothSerial.connect(id).then(
+      $scope.isConnecting = true;
       function() {
         $rootScope.bluetoothId = id;
         $rootScope.isDeviceSlider = _.startsWith(name, 'PROLINESL');
@@ -712,11 +714,13 @@ $scope.$on('$ionicView.enter', function (event) {
           disableBack: true
         });
         $state.go('app.playlists');
+        $scope.isConnecting = false;
         alert('Successfully Connected');
       },
       function() {
         $scope.blStatus = 'Error on Connection';
-        alert('Cannot Connect');
+        $scope.isConnecting = false;
+        alert('Cannot Connect: Please Try Again');
       }
     );
   };
