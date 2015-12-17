@@ -704,7 +704,6 @@ $scope.$on('$ionicView.enter', function (event) {
 
   $scope.connectBT = function(id, name) {
     $cordovaBluetoothSerial.connect(id).then(
-      $scope.isConnecting = true;
       function() {
         $rootScope.bluetoothId = id;
         $rootScope.isDeviceSlider = _.startsWith(name, 'PROLINESL');
