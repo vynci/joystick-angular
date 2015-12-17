@@ -9,29 +9,29 @@
         <div class="col">
           <label class="item item-input">
             <span class="input-label info">Pan Start</span>
-            <input type="number" min="0" class="info" ng-model="panStart">
+            <input type="number" min="-999" class="info" ng-model="panStart">
           </label>
           <label class="item item-input">
             <span class="input-label info">Tilt Start</span>
-            <input type="number" min="0" class="info" ng-model="tiltStart">
+            <input type="number" min="-999" class="info" ng-model="tiltStart">
           </label>
           <label class="item item-input">
             <span class="input-label info">Slider Start</span>
-            <input type="number" min="0" class="info" ng-model="sliderStart">
+            <input type="number" min="-999" class="info" ng-model="sliderStart">
           </label>
         </div>
         <div class="col">
           <label class="item item-input">
             <span class="input-label info" class="info">Pan End</span>
-            <input type="number" min="0" class="info" ng-model="panEnd">
+            <input type="number" min="-999" class="info" ng-model="panEnd">
           </label>
           <label class="item item-input">
             <span class="input-label info">Tilt End</span>
-            <input type="number" min="0" class="info" ng-model="tiltEnd">
+            <input type="number" min="-999" class="info" ng-model="tiltEnd">
           </label>
           <label class="item item-input">
             <span class="input-label info">Slider End</span>
-            <input type="number" min="0" class="info" ng-model="sliderEnd">
+            <input type="number" min="-999" class="info" ng-model="sliderEnd">
           </label>
         </div>
       </div>
@@ -40,20 +40,20 @@
         Options
       </div>
 
-      <label class="item item-input">
-        <span class="input-label info" class="info">Shots</span>
+      <label class="item item-input item-button-right">
+        <span class="input-label info" class="info">Shots Required</span>
         <input type="number" min="0" class="info" ng-model="shotsReq">
       </label>
       <label class="item item-input">
-        <span class="input-label info">Shutter Delay</span>
+        <span class="input-label info">Shutter Delay (milliseconds)</span>
         <input type="number" min="0" class="info" ng-model="shutterDelay">
       </label>
       <label class="item item-input">
-        <span class="input-label info">Stabilize</span>
+        <span class="input-label info">Stabilize (milliseconds)</span>
         <input type="number" min="0" class="info" ng-model="stabilizeDelay">
       </label>
-      <label class="item item-input">
-        <span class="input-label info">Duration</span>
+      <label class="item item-input item-button-right">
+        <span class="input-label info">Duration (seconds)</span>
         <input type="number" min="0" class="info" ng-model="duration">
       </label>
 
@@ -61,7 +61,7 @@
 
     <div class="row">
       <div class="col">
-        <button class="button button-block button-assertive" ng-click="resetValues()">
+        <button class="button button-block button-assertive" ng-click="activate()">
           <i class="icon ion-refresh"></i>
         </button>
       </div>

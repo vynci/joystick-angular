@@ -5,19 +5,19 @@
       <button class="button button-clear" ng-click="closeLogin()">Close</button>
     </div>
   </ion-header-bar> -->
-  <ion-content ng-class="{'modal-settings': !isPhone}" class="background">
+  <ion-content ng-class="{'modal-settings': !isPhone}" class="white-bg">
     <!-- <form> -->
       <div class="login-logo-container">
         <img class="login-logo-img" src="img/steadyTracker.png">
       </div>
-      <div class="info black-bg list list-inset">
+      <div class="list list-inset">
         <label class="item item-input">
-          <span class="input-label info">Email</span>
-          <input type="text" class="info" ng-model="loginData.username" placeholder="user@domain.com">
+          <span class="input-label">Email</span>
+          <input type="text" class="" ng-model="loginData.username" placeholder="user@domain.com">
         </label>
         <label class="item item-input">
-          <span class="input-label info">Password</span>
-          <input type="password" class="info" ng-model="loginData.password">
+          <span class="input-label">Password</span>
+          <input type="password" class="" ng-model="loginData.password">
         </label>
           <button class="button button-block button-dark" ng-click="doLogin()" type="button">Sign in</button>
           <button class="button button-block button-assertive" ng-click="doSignup()" type="button">Sign up</button>

@@ -338,14 +338,7 @@ $scope.sendSettings = function () {
 
 $scope.goHome = function(time, data){
   console.log('home!');
-  $cordovaBluetoothSerial.write('C:H]').then(
-    function() {
-      $scope.blMsgStatus = data;
-    },
-    function() {
-      $scope.blMsgStatus = 'Error';
-    }
-  );
+  $scope.goToXYZ(0,$scope.duration,0,$scope.settings.panHome,$scope.settings.tiltHome,$scope.settings.slideHome);
 }
 
 $scope.writeBluetooth = function(time, data){
@@ -560,6 +553,40 @@ $scope.$on('$ionicView.enter', function (event) {
   $scope.shutterDelay = 500;
   $scope.stabilizeDelay = 500;
 
+
+  $scope.settings = {
+    timeLapseVideoDuration : 60,
+    frameRate : 30,
+    takePicturesDuration : 60
+  }
+
+  function generateValues(){
+    $scope.shotsReq = $scope.settings.timeLapseVideoDuration * $scope.settings.frameRate;
+    $scope.duration = $scope.settings.takePicturesDuration * 60 * 60;
+  }
+
+  $scope.activate = function(){
+    console.log('activate');
+    $ionicModal.fromTemplateUrl('templates/time-lapse-modal.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    });
+  }
+
+  $scope.activate();
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+  $scope.saveModal = function() {
+    generateValues();
+    $scope.modal.hide();
+  };
+
+
   $scope.execute = function(){
     var msg = 't:[' + $scope.duration + ',' + $scope.shotsReq + ',' + $scope.panStart + ','
     + $scope.panEnd + ',' + $scope.tiltStart + ',' + $scope.tiltEnd + ',' + $scope.sliderStart + ','
@@ -630,24 +657,23 @@ $scope.$on('$ionicView.enter', function (event) {
 })
 
 .controller('BluetoothSearch', function($state, $ionicHistory, $scope, $cordovaBluetoothSerial, $timeout, $rootScope) {
-  $scope.blStatus = 'Disabled';
-  console.log($cordovaBluetoothSerial);
+  $scope.blStatus = 'Bluetooth Disabled';
   $scope.checkBT = function (time) {
     $timeout(function () {
       $cordovaBluetoothSerial.isEnabled().then(
         function() {
-          $scope.blStatus = 'Enabled';
+          $scope.blStatus = 'Bluetooth Enabled';
           $scope.listBT();
         },
         function() {
-          $scope.blStatus = 'Disabled';
+          $scope.blStatus = 'Bluetooth Disabled';
           $cordovaBluetoothSerial.enable().then(
             function() {
-              $scope.blStatus = 'Enabled';
+              $scope.blStatus = 'Bluetooth Enabled';
               $scope.listBT();
             },
             function() {
-              $scope.blStatus = 'Disabled';
+              $scope.blStatus = 'Bluetooth Disabled';
             }
           );
         }
@@ -661,7 +687,16 @@ $scope.$on('$ionicView.enter', function (event) {
         $scope.btDevices = devices;
       },
       function() {
-        $scope.blStatus = 'Error on Discover';
+        $scope.blStatus = 'Bluetooth Disabled';
+        $cordovaBluetoothSerial.enable().then(
+          function() {
+            $scope.blStatus = 'Bluetooth Enabled';
+            $scope.listBT();
+          },
+          function() {
+            $scope.blStatus = 'Bluetooth Disabled';
+          }
+        );
       }
     );
   };
@@ -671,6 +706,7 @@ $scope.$on('$ionicView.enter', function (event) {
       function() {
         $rootScope.bluetoothId = id;
         $rootScope.isDeviceSlider = _.startsWith(name, 'PROLINESL');
+        $rootScope.bluetoothName = name;
         $scope.blStatus = 'Successfully Connected';
         $ionicHistory.nextViewOptions({
           disableBack: true

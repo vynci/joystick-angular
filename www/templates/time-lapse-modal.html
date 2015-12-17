@@ -1,0 +1,60 @@
+<div class="modal modal-background">
+  <ion-header-bar ng-show="isPhone" class="bar-dark">
+    <h1 class="title">Settings</h1>
+  </ion-header-bar>
+  <ion-content ng-class="{'modal-settings': !isPhone}" class="background">
+    <div class="item item-divider info center-item">
+      Auto-Genrator Values
+    </div>
+    <div class="list info">
+
+      <div class="card">
+        <div class="item item-text-wrap info">
+          How long do you want to make the Time Lapse video?
+        </div>
+      </div>
+
+      <label ng-show="!isDeviceSlider" class="item item-input">
+        <span class="input-label info" class="info">Enter in seconds</span>
+        <input type="number" min="0" class="info" ng-model="settings.timeLapseVideoDuration">
+      </label>
+      <br>
+
+      <div class="card">
+        <div class="item item-text-wrap info">
+          What frameRate would you like to use? (15-30)
+        </div>
+      </div>
+
+      <label ng-show="!isDeviceSlider" class="item item-input">
+        <span class="input-label info" class="info">Frame Rate</span>
+        <input type="number" min="0" class="info" ng-model="settings.frameRate">
+      </label>
+
+      <br>
+      <div class="card">
+        <div class="item item-text-wrap info">
+          How long do you want to take pictures? (Maximum is 365 days or 8760 hours)
+        </div>
+      </div>
+
+      <label ng-show="!isDeviceSlider" class="item item-input">
+        <span class="input-label info" class="info">Duration in hours</span>
+        <input type="number" min="0" class="info" ng-model="settings.takePicturesDuration">
+      </label>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col">
+        <button class="button button-block button-assertive" ng-click="closeModal()">Cancel</button>
+      </div>
+      <div class="col">
+        <button class="button button-block button-balanced" ng-click="saveModal()">Generate</button>
+      </div>
+    </div>
+
+
+  </ion-content>
+</div>

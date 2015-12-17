@@ -19,29 +19,29 @@
         <div class="col">
           <label ng-show="!isDeviceSlider" class="item item-input">
             <span class="input-label info">Pan Start</span>
-            <input type="number" min="0" class="info" ng-model="settings.panStart">
+            <input type="number" min="-999" class="info" ng-model="settings.panStart">
           </label>
           <label ng-show="!isDeviceSlider" class="item item-input">
             <span class="input-label info">Tilt Start</span>
-            <input type="number" min="0" class="info" ng-model="settings.tiltStart">
+            <input type="number" min="-999" class="info" ng-model="settings.tiltStart">
           </label>
           <label class="item item-input">
             <span class="input-label info">Slider Start</span>
-            <input type="number" min="0" class="info" ng-model="settings.slideStart">
+            <input type="number" min="-999" class="info" ng-model="settings.slideStart">
           </label>
         </div>
         <div class="col">
           <label ng-show="!isDeviceSlider" class="item item-input">
             <span class="input-label info" class="info">Pan End</span>
-            <input type="number" min="0" class="info" ng-model="settings.panEnd">
+            <input type="number" min="-999" class="info" ng-model="settings.panEnd">
           </label>
           <label ng-show="!isDeviceSlider" class="item item-input">
             <span class="input-label info">Tilt End</span>
-            <input type="number" min="0" class="info" ng-model="settings.tiltEnd">
+            <input type="number" min="-999" class="info" ng-model="settings.tiltEnd">
           </label>
           <label class="item item-input">
             <span class="input-label info">Slider End</span>
-            <input type="number" min="0" class="info" ng-model="settings.slideEnd">
+            <input type="number" min="-999" class="info" ng-model="settings.slideEnd">
           </label>
         </div>
       </div>
@@ -55,15 +55,15 @@
 
       <label ng-show="!isDeviceSlider" class="item item-input">
         <span class="input-label info" class="info">Pan</span>
-        <input type="number" min="0" class="info" ng-model="settings.panHome">
+        <input type="number" min="-999" class="info" ng-model="settings.panHome">
       </label>
       <label ng-show="!isDeviceSlider" class="item item-input">
         <span class="input-label info">Tilt</span>
-        <input type="number" min="0" class="info" ng-model="settings.tiltHome">
+        <input type="number" min="-999" class="info" ng-model="settings.tiltHome">
       </label>
       <label class="item item-input">
         <span class="input-label info">Slider</span>
-        <input type="number" min="0" class="info" ng-model="settings.slideHome">
+        <input type="number" min="-999" class="info" ng-model="settings.slideHome">
       </label>
 
       <div class="item item-divider info center-item">

@@ -33,8 +33,11 @@
                 class="item item-button-right info">
           <b><i class="icon ion-bluetooth"></i></b>
           {{device.name}}
-          <button class="button button-assertive" ng-click="connectBT(device.id, device.name)">
+          <button ng-hide="bluetoothName === device.name" class="button button-assertive" ng-click="connectBT(device.id, device.name)">
             Connect
+          </button>
+          <button ng-show="bluetoothName === device.name" class="button button-balanced">
+            Connected
           </button>
       </ion-item>
     </div>

@@ -17,7 +17,7 @@
       </div>
       <div class="range range-assertive">
         <span class="tablet-size-indicator">{{move.offset}}</span>
-        <input type="range" name="volume" min="0" max="100" ng-model="move.offset">
+        <input type="range" name="volume" min="0" max="999" ng-model="move.offset">
       </div>
 
       <div class="item item-divider info center-item">
@@ -38,17 +38,17 @@
         Set Position
       </div>
 
-      <label ng-hide="isDeviceSlider" class="item item-input">
+      <label class="item item-input">
         <span class="input-label info" class="info">Pan</span>
-        <input type="number" min="0" class="info" ng-model="move.pan">
+        <input type="number" min="-999" class="info" ng-model="move.pan">
       </label>
-      <label ng-hide="isDeviceSlider" class="item item-input">
+      <label class="item item-input">
         <span class="input-label info">Tilt</span>
-        <input type="number" min="0" class="info" ng-model="move.tilt">
+        <input type="number" min="-999" class="info" ng-model="move.tilt">
       </label>
       <label class="item item-input">
         <span class="input-label info">Slider</span>
-        <input type="number" min="0" class="info" ng-model="move.slider">
+        <input type="number" min="-999" class="info" ng-model="move.slider">
       </label>
 
 

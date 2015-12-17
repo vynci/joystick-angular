@@ -4,6 +4,11 @@
       <div class="item item-divider info center-item">
         Local
       </div>
+      <div ng-hide="fileList.length" class="card">
+        <div class="item item-text-wrap info center-item">
+          Stack list is empty
+        </div>
+      </div>
       <ion-item class="info" ng-repeat="item in fileList track by $index" style="padding: 0px;">
 
         <div class="row">

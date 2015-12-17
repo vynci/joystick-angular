@@ -46,6 +46,10 @@
 .black-bg{
   background-color: #1A1A1A !important;
 }
+
+.white-bg{
+  background-color: white !important;
+}
 .background, .background .pane, .background .item {
     background-color: #1A1A1A;
 }
@@ -116,8 +120,8 @@ circle {
 }
 
 .login-logo-container{
-  height: 215px;
-  padding-top: 30%;
+  height: 340px;
+  padding-top: 0%;
   padding-left: 3%;
   padding-right: 3%;
 }
@@ -125,7 +129,7 @@ circle {
   width: 100%;
 }
 .login-modal{
-  height: 50%;
+  height: 55%;
 }
 
 
