@@ -19,8 +19,6 @@
   <preference name="SplashScreenDelay" value="3000"/>
   <plugin name="com.megster.cordova.bluetoothserial" spec="0.3.3" source="pgb" />
   <plugin name="org.apache.cordova.file" spec="1.3.3" source="pgb" />
-  <plugin name="com.ionic.keyboard" spec="1.0.3" source="pgb" />
-  <plugin name="com.wizardlogic.cordova.ios_keyboard" spec="2.0.0" source="pgb" />
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
