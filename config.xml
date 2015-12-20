@@ -68,5 +68,5 @@
     <splash src="resources/ios/splash/Default@2x~iphone.png" height="960" width="640"/>
     <splash src="resources/ios/splash/Default~iphone.png" height="480" width="320"/>
   </platform>
-  <plugin name="com.megster.cordova.bluetoothserial" spec="0.3.3" source="pgb" />
+  <plugin name="cordova-plugin-bluetooth-serial" source="pgb" />
 </widget>
