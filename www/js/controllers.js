@@ -20,9 +20,10 @@ angular.module('starter.controllers', [])
   $scope.isSlider = false;
 
   // $rootScope.isDeviceSlider = true;
-  // $scope.isBluetoothConnected = true;
+  $scope.isBluetoothConnected = true;
   function activate(){
-    if($window.innerHeight < 1279 && $window.innerWidth < 799 ){
+    console.log($window.innerWidth);
+    if($window.innerHeight < 1279 && $window.innerWidth < 767 ){
       $scope.isPhone = true;
     } else {
       $scope.isPhone = false;
