@@ -50,7 +50,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.move-stack-service', '
           $cordovaFile.writeFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
            .then(function (success) {
            }, function (error) {
-
+             alert(error);
           });
         });
       });
