@@ -50,7 +50,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.move-stack-service', '
         document.addEventListener('deviceready', function () {
           $cordovaFile.createFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', true)
            .then(function (success) {
-             alert('Move Stacks Loaded');
+             alert('Created new File!');
            }, function (error) {
              console.log(error);
              alert('Loading Move Stacks Error');
