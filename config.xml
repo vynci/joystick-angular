@@ -71,5 +71,5 @@
   <plugin name="com.ionic.keyboard" spec="1.0.3" source="pgb" />
   <plugin name="cordova-plugin-splashscreen" spec="2.1.0" source="pgb" />
   <gap:plugin name="cordova-plugin-bluetooth-serial" version="0.4.5" source="npm" />
-  <plugin name="cordova-plugin-file" spec="3.0.0" source="pgb" />
+  <plugin name="cordova-plugin-file" spec="4.0.0" source="pgb" />
 </widget>
