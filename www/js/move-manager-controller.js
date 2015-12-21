@@ -50,7 +50,7 @@ angular.module('starter.move-manager', [])
         });
         // $rootScope.moveStacks[$rootScope.keyFrames.stackId].keyFrames = $rootScope.keyFrames.keyFrames;
         console.log($rootScope.moveStacks);
-        $cordovaFile.writeFile(cordova.file.dataDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
+        $cordovaFile.writeFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
          .then(function (success) {
            alert('success!');
          }, function (error) {
@@ -66,7 +66,7 @@ angular.module('starter.move-manager', [])
         }
         $rootScope.moveStacks.push(data);
         console.log($rootScope);
-        $cordovaFile.writeFile(cordova.file.dataDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
+        $cordovaFile.writeFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
          .then(function (success) {
            alert('Created New Stack');
            $scope.bluetoothRx = 'file ' + data.stackName + ' saved!';

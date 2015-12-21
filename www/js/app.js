@@ -33,10 +33,10 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.move-stack-service', '
     }
 
     document.addEventListener('deviceready', function () {
-      $cordovaFile.checkFile(cordova.file.dataDirectory, 'autoCraneFile20.json')
+      $cordovaFile.checkFile(cordova.file.documentsDirectory, 'autoCraneFile20.json')
       .then(function (success) {
         document.addEventListener('deviceready', function () {
-          $cordovaFile.readAsText(cordova.file.dataDirectory, 'autoCraneFile20.json')
+          $cordovaFile.readAsText(cordova.file.documentsDirectory, 'autoCraneFile20.json')
           .then(function (success) {
             var tmp = JSON.parse(success);
             $rootScope.moveStacks = tmp;
@@ -47,7 +47,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.move-stack-service', '
       }, function (error) {
         $rootScope.moveStacks = [];
         document.addEventListener('deviceready', function () {
-          $cordovaFile.writeFile(cordova.file.dataDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
+          $cordovaFile.writeFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
            .then(function (success) {
            }, function (error) {
 

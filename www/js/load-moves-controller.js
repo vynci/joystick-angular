@@ -29,7 +29,7 @@ angular.module('starter.load-moves', [])
         });
         $rootScope.moveStacks = newData;
         document.addEventListener('deviceready', function () {
-          $cordovaFile.writeFile(cordova.file.dataDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
+          $cordovaFile.writeFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
            .then(function (success) {
              alert('File deleted from Local');
              $rootScope.keyFrames = {

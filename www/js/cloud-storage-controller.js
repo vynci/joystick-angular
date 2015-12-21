@@ -118,7 +118,7 @@ angular.module('starter.cloud-storage', ['starter.move-stack-service'])
         keyFrames : obj.keyFrames
       }
       $rootScope.moveStacks.push(data);
-      $cordovaFile.writeFile(cordova.file.dataDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
+      $cordovaFile.writeFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
        .then(function (success) {
          alert(obj.stackName + ' Saved to Local');
        }, function (error) {
