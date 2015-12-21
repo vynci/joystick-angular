@@ -40,6 +40,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.move-stack-service', '
           .then(function (success) {
             var tmp = JSON.parse(success);
             $rootScope.moveStacks = tmp;
+            alert('Move Stacks Loaded');
           }, function (error) {
             alert('file error!');
           });
@@ -49,8 +50,10 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.move-stack-service', '
         document.addEventListener('deviceready', function () {
           $cordovaFile.createFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', true)
            .then(function (success) {
+             alert('Move Stacks Loaded');
            }, function (error) {
-             alert(error);
+             console.log(error);
+             alert('Loading Move Stacks Error');
           });
         });
       });
