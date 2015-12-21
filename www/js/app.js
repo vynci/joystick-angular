@@ -47,7 +47,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.move-stack-service', '
       }, function (error) {
         $rootScope.moveStacks = [];
         document.addEventListener('deviceready', function () {
-          $cordovaFile.writeFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', $rootScope.moveStacks, true)
+          $cordovaFile.createFile(cordova.file.documentsDirectory, 'autoCraneFile20.json', true)
            .then(function (success) {
            }, function (error) {
              alert(error);
