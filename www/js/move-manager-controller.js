@@ -257,17 +257,6 @@ angular.module('starter.move-manager', [])
       }
       x++;
     }, 450);
-
-
-
-    // mainMsg = $rootScope.keyFrames[1].offset + ',' + $rootScope.keyFrames[1].duration + ',' + $rootScope.keyFrames[1].delay + ',' + $rootScope.keyFrames[1].pan + ',' + $rootScope.keyFrames[1].tilt+ ',' + $rootScope.keyFrames[1].slider + ']';
-    // $scope.mainMsg(1000, mainMsg);
-    //
-    // mainMsg = $rootScope.keyFrames[2].offset + ',' + $rootScope.keyFrames[2].duration + ',' + $rootScope.keyFrames[2].delay + ',' + $rootScope.keyFrames[2].pan + ',' + $rootScope.keyFrames[2].tilt+ ',' + $rootScope.keyFrames[2].slider + ']';
-    // $scope.initMsg(1000, mainMsg);
-
-
-    // $scope.mainMsg(500, ']');
   }
 
   $scope.sendPause = function(){
@@ -410,7 +399,6 @@ angular.module('starter.move-manager', [])
   }
 
   var bluetoothReadInterval = '';
-
 
   function destroyBluetoothInterval(){
     $interval.cancel(bluetoothReadInterval);

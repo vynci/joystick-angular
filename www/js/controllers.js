@@ -29,6 +29,18 @@ angular.module('starter.controllers', [])
     }
   }
 
+  function stringToBytes(string) {
+    var array = new Uint8Array(string.length);
+    for (var i = 0, l = string.length; i < l; i++) {
+      array[i] = string.charCodeAt(i);
+    }
+    return array.buffer;
+  }
+
+  function bytesToString(buffer) {
+    return String.fromCharCode.apply(null, new Uint8Array(buffer));
+  }
+
   activate();
   $scope.enableLoop = function(){
     $scope.isLoop = true;
@@ -86,8 +98,6 @@ angular.module('starter.controllers', [])
 
   $scope.done = function (value) {
     $scope.doneValue = value;
-    console.log(value.direction);
-    console.log($scope.prevValue)
 
     if($scope.prevValue !== value.direction){
       $scope.prevValue = value.direction;
@@ -142,10 +152,6 @@ angular.module('starter.controllers', [])
     } else {
       $scope.isPanTiltJoystick = true;
     }
-  }
-
-  $scope.killSwitch = function(){
-    $scope.writeBluetooth(1, 'D]');
   }
 
   $scope.updateAllPosition = function(){
@@ -278,23 +284,16 @@ $scope.goToXYZ = function (offset, duration, delay, pan, tilt, slider) {
   } else {
     loop = '0';
   }
-  console.log('G:[' + offset + ',' + duration + ',' + delay + ',' + pan + ',' + tilt + ',' + slider + ',' + loop + ']');
-  $cordovaBluetoothSerial.isConnected().then(
-    function() {
-      $cordovaBluetoothSerial.write('G:[' + offset + ',' + duration + ',' + delay + ',' + pan + ',' + tilt + ',' + slider + ',' + loop + ']').then(
-        function() {
-          $scope.blMsgStatus = 'Enabled';
-        },
-        function() {
-          alert('Error: Please Reconnect Bluetooth');
-        }
-      );
-    },
-    function() {
-      alert('Error: Please Reconnect Bluetooth');
-      $state.go('app.search');
-    }
-  );
+
+  var tmp = 'G:[' + offset + ',' + duration + ',' + delay + ',' + pan + ',' + tilt + ',' + slider + ',' + loop + ']';
+  console.log(tmp);
+
+  var data = stringToBytes(tmp);
+  ble.write($rootScope.connectedDevice.id, "ffe0", "ffe1", data, function(){
+    console.log('success on write!');
+  }, function(){
+    console.log('error on write!');
+  });
 };
 
 $scope.openBTSettings = function() {
@@ -325,14 +324,12 @@ $scope.sendSettings = function () {
 
   console.log(msg);
 
-  $cordovaBluetoothSerial.write(msg).then(
-    function() {
-      $scope.blMsgStatus = 'Enabled';
-    },
-    function() {
-      $scope.blMsgStatus = 'Disabled';
-    }
-  );
+  var data = stringToBytes(msg);
+  ble.write($rootScope.connectedDevice.id, "ffe0", "ffe1", data, function(){
+    alert('Settings sent on Device');
+  }, function(){
+    alert('error on send!');
+  });
   // },500);
 };
 
@@ -341,111 +338,56 @@ $scope.goHome = function(time, data){
   $scope.goToXYZ(0,$scope.duration,0,$scope.settings.panHome,$scope.settings.tiltHome,$scope.settings.slideHome);
 }
 
-$scope.writeBluetooth = function(time, data){
+$scope.writeBluetooth = function(time, tmp){
   console.log(data);
-  $timeout(function () {
-    $cordovaBluetoothSerial.write(data).then(
-      function() {
-        $scope.blMsgStatus = data;
-      },
-      function() {
-        $scope.blMsgStatus = 'Error';
-      }
-    );
-   },time);
-
-   $timeout(function () {
-     $cordovaBluetoothSerial.write(data).then(
-       function() {
-         $scope.blMsgStatus = data;
-       },
-       function() {
-         $scope.blMsgStatus = 'Error';
-       }
-     );
-   },time + 250);
-
-   $timeout(function () {
-     $cordovaBluetoothSerial.write(data).then(
-       function() {
-         $scope.blMsgStatus = data;
-       },
-       function() {
-         $scope.blMsgStatus = 'Error';
-       }
-     );
-   },time + 250);
-
-   $timeout(function () {
-     $cordovaBluetoothSerial.write(data).then(
-       function() {
-         $scope.blMsgStatus = data;
-       },
-       function() {
-         $scope.blMsgStatus = 'Error';
-       }
-     );
-   },time + 250);
-
-
+  var data = stringToBytes(tmp);
+  ble.write($rootScope.connectedDevice.id, "ffe0", "ffe1", data, function(){
+    console.log('success on write!');
+  }, function(){
+    console.log('error on write!');
+  });
 }
 
 //////// Bluetooth Listener /////
-$scope.readBufferBT = function(){
-  $cordovaBluetoothSerial.read().then(
-    function(data) {
-      // console.log('read: ', data);
-      if(data !== ''){
-        console.log('Received: ' + data);
-      }
+function readBufferBT ( buffer ){
+  var data = bytesToString(buffer);
 
-      if(data === 'E:0'){
-        alert('Request Re-Transmission!');
-      }
+  if(data !== ''){
+    console.log('Received: ' + data);
+  }
 
-      if($rootScope.isDeviceSlider){
-        var tmp1 = data.split(',');
-        var slider1 = tmp1[0].split('S');
+  if(data === 'E:0'){
+    alert('Request Re-Transmission!');
+  }
 
-        slider1 = slider1[2];
+  if($rootScope.isDeviceSlider){
+    var tmp1 = data.split(',');
+    var slider1 = tmp1[0].split('S');
 
-        if(slider1 !== undefined){
+    slider1 = slider1[2];
 
-          $scope.currentSlider = slider1;
+    if(slider1 !== undefined){
 
-          $scope.bluetoothRx = 'Slider: ' + slider1;
-        }
-      } else {
-        var tmp = data.split(',');
-        var pan = tmp[0].split('P');
+      $scope.currentSlider = slider1;
 
-        pan = pan[2];
-        var tilt = tmp[1];
-        var slider = tmp[2];
-
-        if(pan !== undefined && tilt !== undefined){
-          $scope.currentPan = pan;
-          $scope.currentTilt = tilt;
-          $scope.currentSlider = slider;
-
-          $scope.bluetoothRx = 'Pan: ' + pan + ' - ' + 'Tilt: ' + tilt + ' - ' + 'Slider: ' + slider;
-        }
-      }
-
-
-
-    },
-    function(err) {
-      $scope.bluetoothRx = err;
+      $scope.bluetoothRx = 'Slider: ' + slider1;
     }
-  );
-}
+  } else {
+    var tmp = data.split(',');
+    var pan = tmp[0].split('P');
 
-var bluetoothReadInterval = '';
+    pan = pan[2];
+    var tilt = tmp[1];
+    var slider = tmp[2];
 
+    if(pan !== undefined && tilt !== undefined){
+      $scope.currentPan = pan;
+      $scope.currentTilt = tilt;
+      $scope.currentSlider = slider;
 
-function destroyBluetoothInterval(){
-  $interval.cancel(bluetoothReadInterval);
+      $scope.bluetoothRx = 'Pan: ' + pan + ' - ' + 'Tilt: ' + tilt + ' - ' + 'Slider: ' + slider;
+    }
+  }
 }
 
 $scope.$on('$ionicView.beforeLeave', function (event) {
@@ -465,76 +407,41 @@ $scope.$on('$ionicView.beforeLeave', function (event) {
     tilt : tilt,
     slider : $scope.sliderPosition.slider
   }
-  destroyBluetoothInterval();
+
+  ble.stopNotification($rootScope.connectedDevice.id, "ffe0", "ffe1", function(){
+    console.log('BT Search - notificaton stop');
+  }, function(err){
+    console.log(err);
+  });
 });
 
 $scope.$on('$ionicView.enter', function (event) {
 
-  bluetoothReadInterval = $interval(function(){
-    $scope.readBufferBT();
-  }, 75);
+  ble.startNotification($rootScope.connectedDevice.id, "ffe0", "ffe1", readBufferBT, function(err){
+    console.log(err);
+  });
 });
-
-// $window.bluetoothSerial.subscribe('\n', function (data) {
-//   $scope.bluetoothRx = data;
-// //do something with data
-// });
 
 //////////////// Bluetooth Initialization ////////////
 
-  $scope.checkBT = function (time) {
-    $timeout(function () {
-      $cordovaBluetoothSerial.isConnected().then(
-        function() {
-          $scope.blMsgStatus = 'Enabled';
-          $scope.isBluetoothConnected = true;
-        },
-        function() {
-          $scope.blMsgStatus = 'Disabled';
-          $scope.connectBT($rootScope.bluetoothId);
-          $scope.isBluetoothConnected = false;
-          $scope.bluetoothRx = 'Bluetooth Currently Disabled';
-        }
-      );
-     },time);
-  };
-
-  $scope.connectBT = function(id) {
-    $cordovaBluetoothSerial.connect(id).then(
+$scope.checkBT = function (time) {
+  $timeout(function () {
+    ble.isEnabled(
       function() {
-        $rootScope.bluetoothId = id;
-        $scope.blMsgStatus = 'Successfully Connected';
+        $scope.blMsgStatus = 'Enabled';
         $scope.isBluetoothConnected = true;
-        $scope.subscribeBT();
       },
       function() {
-        $scope.blMsgStatus = 'Error on Connection';
+        $scope.blMsgStatus = 'Disabled';
         $scope.isBluetoothConnected = false;
+        $scope.bluetoothRx = 'Bluetooth Currently Disabled';
       }
     );
-  };
+  },time);
+};
 
-
-
-  $scope.readAvailableBT = function(){
-
-    $cordovaBluetoothSerial.available().then(
-      function(data) {
-        $scope.bluetoothAvailable = data;
-        if(data !== 0){
-          $scope.readBufferBT();
-        }
-        return data;
-      },
-      function(err) {
-        $scope.bluetoothAvailable = err;
-        return err;
-      }
-    );
-  }
-
-  $scope.checkBT(1000);
-  $scope.bluetoothRx = 'Reading Data From Bluetooth...';
+$scope.checkBT(500);
+$scope.bluetoothRx = 'Reading Data From Bluetooth...';
 })
 
 .controller('TimeLapseCtrl', function($scope, $cordovaBluetoothSerial, $ionicModal, $timeout ) {
@@ -563,6 +470,18 @@ $scope.$on('$ionicView.enter', function (event) {
   function generateValues(){
     $scope.shotsReq = $scope.settings.timeLapseVideoDuration * $scope.settings.frameRate;
     $scope.duration = $scope.settings.takePicturesDuration * 60 * 60;
+  }
+
+  function stringToBytes(string) {
+    var array = new Uint8Array(string.length);
+    for (var i = 0, l = string.length; i < l; i++) {
+      array[i] = string.charCodeAt(i);
+    }
+    return array.buffer;
+  }
+
+  function bytesToString(buffer) {
+    return String.fromCharCode.apply(null, new Uint8Array(buffer));
   }
 
   $scope.activate = function(){
@@ -613,113 +532,143 @@ $scope.$on('$ionicView.enter', function (event) {
     $scope.stabilizeDelay = 500;
   }
 
-  $scope.mainMsg = function(time, data){
-    //$timeout(function () {
-    $cordovaBluetoothSerial.write(data).then(
-      function() {
-        $scope.blMsgStatus = data;
-      },
-      function() {
-        $scope.blMsgStatus = 'Error';
-      }
-    );
-    //},time);
+  $scope.mainMsg = function(time, buffer){
+
+    var data = stringToBytes(buffer);
+    ble.write($rootScope.connectedDevice.id, "ffe0", "ffe1", data, function(){
+      alert('Executing Time Lapse.');
+    }, function(){
+      alert('error on write!');
+    });
   }
 
-  $scope.connectBT = function(id) {
-    $cordovaBluetoothSerial.connect(id).then(
-      function() {
-        $rootScope.bluetoothId = id;
-        $scope.blMsgStatus = 'Successfully Connected';
-        $scope.subscribeBT();
-      },
-      function() {
-        $scope.blMsgStatus = 'Error on Connection';
-      }
-    );
-  };
   $scope.checkBT = function (time) {
     $timeout(function () {
-      $cordovaBluetoothSerial.isConnected().then(
+      ble.isEnabled(
         function() {
           $scope.blMsgStatus = 'Enabled';
+          $scope.isBluetoothConnected = true;
         },
         function() {
           $scope.blMsgStatus = 'Disabled';
-          $scope.connectBT($rootScope.bluetoothId);
+          $scope.isBluetoothConnected = false;
+          $scope.bluetoothRx = 'Bluetooth Currently Disabled';
         }
       );
     },time);
   };
 
-  $scope.checkBT(1000);
+  $scope.checkBT(500);
 
 })
 
-.controller('BluetoothSearch', function($state, $ionicHistory, $scope, $cordovaBluetoothSerial, $timeout, $rootScope) {
+.controller('BluetoothSearch', function($state, $ionicHistory, $scope, $timeout, $rootScope, BLE, $interval) {
   $scope.blStatus = 'Bluetooth Disabled';
+  $scope.isConnecting = false;
+  $scope.btDevices = BLE.devices;
+
+  var success = function () {
+    if ($scope.btDevices.length < 1) {
+      // a better solution would be to update a status message rather than an alert
+      alert("Didn't find any Bluetooth Low Energy devices.");
+    }
+  };
+
+  var failure = function (error) {
+    alert(error);
+  };
+
+  var onData = function(buffer) {
+    // Decode the ArrayBuffer into a typed Array based on the data you expect
+    var data = bytesToString(buffer);
+    console.log(data);
+  }
+
+  function stringToBytes(string) {
+    var array = new Uint8Array(string.length);
+    for (var i = 0, l = string.length; i < l; i++) {
+      array[i] = string.charCodeAt(i);
+    }
+    return array.buffer;
+  }
+
+  function bytesToString(buffer) {
+    return String.fromCharCode.apply(null, new Uint8Array(buffer));
+  }
+
   $scope.checkBT = function (time) {
     $timeout(function () {
-      $cordovaBluetoothSerial.isEnabled().then(
+      ble.isEnabled(
         function() {
-          $scope.blStatus = 'Bluetooth Enabled';
-          $scope.listBT();
+          $scope.blStatus = 'Bluetooth Enable';
+          BLE.scan().then(success, failure);
         },
         function() {
-          $scope.blStatus = 'Bluetooth Disabled';
-          $cordovaBluetoothSerial.enable().then(
+          ble.enable(
             function() {
-              $scope.blStatus = 'Bluetooth Enabled';
-              $scope.listBT();
+              $scope.blStatus = 'Bluetooth Enable';
+              BLE.scan().then(success, failure);
             },
             function() {
-              $scope.blStatus = 'Bluetooth Disabled';
+              console.log("The user did *not* enable Bluetooth");
             }
           );
         }
       );
-     },time);
+    }, time);
   };
 
   $scope.listBT = function() {
-    $cordovaBluetoothSerial.list().then(
-      function(devices) {
-        $scope.btDevices = devices;
-      },
+    BLE.scan().then(
+      success, failure
+    ).finally(
       function() {
-        $scope.blStatus = 'Bluetooth Disabled';
-        $cordovaBluetoothSerial.enable().then(
-          function() {
-            $scope.blStatus = 'Bluetooth Enabled';
-            $scope.listBT();
-          },
-          function() {
-            $scope.blStatus = 'Bluetooth Disabled';
-          }
-        );
+        $scope.$broadcast('scroll.refreshComplete');
       }
-    );
+    )
   };
 
   $scope.connectBT = function(id, name) {
-    $cordovaBluetoothSerial.connect(id).then(
-      function() {
-        $rootScope.bluetoothId = id;
-        $rootScope.isDeviceSlider = _.startsWith(name, 'PROLINESL');
-        $rootScope.bluetoothName = name;
-        $scope.blStatus = 'Successfully Connected';
-        $ionicHistory.nextViewOptions({
-          disableBack: true
+    BLE.connect(id).then(
+      function(peripheral) {
+        $rootScope.connectedDevice = peripheral;
+        console.log($rootScope.connectedDevice);
+
+        var data = stringToBytes('AT+PIO21');
+        ble.write(peripheral.id, "ffe0", "ffe1", data, function(){
+          alert('success on write!');
+          $scope.readBufferBT();
+        }, function(){
+          alert('error on write!');
         });
-        $state.go('app.playlists');
-        alert('Successfully Connected');
-      },
-      function() {
-        $scope.blStatus = 'Error on Connection';
-        alert('Cannot Connect');
+
       }
     );
   };
 
+  $scope.readBufferBT = function(){
+    ble.startNotification($rootScope.connectedDevice.id, "ffe0", "ffe1", onData, function(err){
+      console.log(err);
+    });
+  };
+
+  $scope.testWrite = function(){
+    var data = stringToBytes('hello');
+    ble.write($rootScope.connectedDevice.id, "ffe0", "ffe1", data, function(){
+      alert('success on write!');
+    }, function(){
+      alert('error on write!');
+    });
+  }
+
   $scope.checkBT(1000);
+
+  $scope.$on('$ionicView.beforeLeave', function (event) {
+    ble.stopNotification($rootScope.connectedDevice.id, "ffe0", "ffe1", function(){
+      console.log('BT Search - notificaton stop');
+    }, function(err){
+      console.log(err);
+    });
+  });
+
 });
